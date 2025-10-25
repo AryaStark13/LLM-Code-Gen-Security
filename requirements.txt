@@ -1,0 +1,16 @@
+torch
+transformers
+datasets
+trl
+accelerate
+peft
+bitsandbytes
+wandb
+pyyaml
+numpy
+tqdm
+tabulate
+python-dotenv
+ipykernel
+google-genai
+openai
