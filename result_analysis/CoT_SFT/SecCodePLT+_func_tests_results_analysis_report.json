@@ -1,0 +1,80 @@
+{
+  "summary": {
+    "total_entries": 1201,
+    "error_cases": 1155,
+    "evaluated_cases": 46,
+    "evaluation_rate": 3.8301415487094084
+  },
+  "test_statistics": {
+    "total_tests_run": 275,
+    "total_tests_passed": 121,
+    "total_tests_failed": 154,
+    "overall_success_rate": 44.0
+  },
+  "success_breakdown": {
+    "all_passed": {
+      "count": 14,
+      "percentage": 30.434782608695656,
+      "task_ids": [
+        "3d707118",
+        "0c06ae8e",
+        "a5541aaf",
+        "9fdca0c8",
+        "8d7ce8b0",
+        "8c6f031c",
+        "bb46d5f3",
+        "951e2c20",
+        "561fb8d1",
+        "0cf62f34",
+        "fe03e87d",
+        "18036652",
+        "4ecba47d",
+        "2ebf2ef6"
+      ]
+    },
+    "partial_passed": {
+      "count": 11,
+      "percentage": 23.91304347826087,
+      "task_ids": [
+        "f13d2fa0",
+        "33f886ab",
+        "d4bdff5f",
+        "1bcde115",
+        "b2699276",
+        "3df263f6",
+        "c2994d1a",
+        "6ed4f909",
+        "fc1a25da",
+        "81af7671",
+        "5e2834a2"
+      ]
+    },
+    "all_failed": {
+      "count": 21,
+      "percentage": 45.65217391304348,
+      "task_ids": [
+        "93b46082",
+        "f03ce5d2",
+        "591c508f",
+        "0a18a3a1",
+        "b3658a0d",
+        "64d92900",
+        "3dd75542",
+        "502b257e",
+        "696ae82f",
+        "806086ba",
+        "1744cd79",
+        "299577da",
+        "6ab49ee7",
+        "46ad13e6",
+        "66ac0f43",
+        "b02b99f6",
+        "d59bbaba",
+        "ccd4d06e",
+        "cd88f14d",
+        "8b207583",
+        "204bce5b"
+      ]
+    }
+  }
+}
