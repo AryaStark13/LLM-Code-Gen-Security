@@ -93,4 +93,7 @@ class OpenAI:
                 if max_retries == 0:
                     raise e
 
-        return response, response.choices[0].message.content
+        message = response.choices[0].message
+        llm_response_text = getattr(message, "reasoning_content", None) or getattr(message, "content", None)
+        return response, llm_response_text
+        # return response, response.choices[0].message.content
