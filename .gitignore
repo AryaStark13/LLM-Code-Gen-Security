@@ -3,4 +3,4 @@
 .env
 __pycache__/
 *playground*
-*.arrow
+data/SecCodePLT/data/seccodeplt_updated_with_cot_HF_dataset/
