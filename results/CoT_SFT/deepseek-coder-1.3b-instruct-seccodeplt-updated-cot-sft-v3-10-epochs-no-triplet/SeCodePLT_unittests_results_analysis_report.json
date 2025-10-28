@@ -115,5 +115,15 @@
         1395
       ]
     }
+  },
+  "capability_breakdown": {
+    "all_passed": 1,
+    "partial_passed": 15,
+    "all_failed": 46
+  },
+  "safety_breakdown": {
+    "all_passed": 1,
+    "partial_passed": 15,
+    "all_failed": 46
   }
 }
