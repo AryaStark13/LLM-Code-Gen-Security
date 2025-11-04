@@ -1,4 +1,5 @@
 #!/bin/bash
+# Script is now stale: SecCodePLT+ functional tests are not used.
 
 # Setup
 source .venv/bin/activate

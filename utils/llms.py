@@ -94,6 +94,7 @@ class OpenAI:
                     raise e
 
         message = response.choices[0].message
-        llm_response_text = getattr(message, "reasoning_content", None) or getattr(message, "content", None)
+        llm_response_text = getattr(message, "content", None)
+        # llm_think_text = getattr(message, "reasoning_content", None)
         return response, llm_response_text
         # return response, response.choices[0].message.content
