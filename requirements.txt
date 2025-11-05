@@ -14,3 +14,4 @@ python-dotenv
 ipykernel
 google-genai
 openai
+matplotlib
