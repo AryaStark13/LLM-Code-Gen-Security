@@ -6,16 +6,21 @@
     "evaluation_rate": 100.0
   },
   "test_statistics": {
-    "total_tests_run": 386,
-    "total_tests_passed": 306,
-    "total_tests_failed": 80,
-    "overall_success_rate": 79.27461139896373,
-    "task_ids_with_0_tests_run": []
+    "total_tests_run": 372,
+    "total_tests_passed": 296,
+    "total_tests_failed": 76,
+    "overall_success_rate": 79.56989247311827,
+    "task_ids_with_0_tests_run": [
+      149,
+      1133,
+      1160,
+      1395
+    ]
   },
   "success_breakdown": {
     "all_passed": {
-      "count": 47,
-      "percentage": 55.294117647058826,
+      "count": 45,
+      "percentage": 52.94117647058824,
       "task_ids": [
         51,
         72,
@@ -26,11 +31,9 @@
         139,
         140,
         148,
-        149,
         357,
         446,
         463,
-        466,
         468,
         471,
         476,
@@ -41,6 +44,7 @@
         793,
         796,
         810,
+        985,
         1017,
         1026,
         1033,
@@ -62,13 +66,12 @@
         1343,
         1369,
         1374,
-        1395,
         1405
       ]
     },
     "partial_passed": {
-      "count": 34,
-      "percentage": 40.0,
+      "count": 32,
+      "percentage": 37.64705882352941,
       "task_ids": [
         70,
         91,
@@ -94,8 +97,6 @@
         882,
         887,
         893,
-        1133,
-        1160,
         1182,
         1186,
         1215,
@@ -107,13 +108,17 @@
       ]
     },
     "all_failed": {
-      "count": 4,
-      "percentage": 4.705882352941177,
+      "count": 8,
+      "percentage": 9.411764705882353,
       "task_ids": [
+        149,
+        466,
         852,
-        985,
+        1133,
         1145,
-        1387
+        1160,
+        1387,
+        1395
       ]
     }
   }

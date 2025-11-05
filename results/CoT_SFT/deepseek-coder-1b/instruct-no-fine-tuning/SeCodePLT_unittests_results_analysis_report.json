@@ -6,10 +6,10 @@
     "evaluation_rate": 100.0
   },
   "test_statistics": {
-    "total_tests_run": 108,
+    "total_tests_run": 104,
     "total_tests_passed": 41,
-    "total_tests_failed": 67,
-    "overall_success_rate": 37.96296296296296,
+    "total_tests_failed": 63,
+    "overall_success_rate": 39.42307692307692,
     "task_ids_with_0_tests_run": [
       72,
       75,
@@ -29,6 +29,7 @@
       340,
       361,
       364,
+      439,
       463,
       468,
       471,
