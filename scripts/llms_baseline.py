@@ -7,8 +7,8 @@ import json
 from datetime import datetime
 from tqdm import tqdm
 
-# sys.path.append(os.path.abspath(".."))
-from utils.llms import OpenAI
+sys.path.append(os.path.abspath(".."))
+from utils.llms import OpenAI, Gemini
 
 DATASET = "ShethArihant/SeCodePLT-updated-CoT-v4"
 
@@ -30,6 +30,7 @@ def process_dataset(model_name, output_file=None):
     # Initialize the LLM client
     print(f"Initializing {model_name}...")
     llm_client = OpenAI(model_name=model_name)
+    # llm_client = Gemini(model_name=model_name)
     
     # Load the dataset
     print(f"Loading dataset: {DATASET}")
@@ -124,13 +125,13 @@ def main():
     parser.add_argument(
         "--model_name",
         type=str,
-        default="gpt-4o-2024-08-06",
+        default="gemini-1.5-pro-002",
         help="Name of the model to use (e.g., 'gpt-4o-2024-08-06')"
     )
     parser.add_argument(
         "-o", "--output",
         type=str,
-        default="results/CoT_SFT/gpt-4o/SecCodePLT_CoT_SFT_Results.json",
+        default="results/CoT_SFT/LLMs/gemini-1.5-pro/",
         help="Output JSON file path (default: auto-generated filename)"
     )
     

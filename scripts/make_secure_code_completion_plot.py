@@ -14,12 +14,12 @@ import argparse
 
 # Define model configurations: (model_folder, variant_folder, display_label)
 MODEL_CONFIGS = [
-    ("deepseek-coder-1b", "instruct-no-fine-tuning", "DeepSeek-1B\nInstruct"),
-    ("deepseek-coder-1b", "CoT-SFT_only", "DeepSeek-1B\nCoT-SFT"),
-    ("deepseek-coder-7b", "instruct-no-fine-tuning", "DeepSeek-7B\nInstruct"),
-    ("deepseek-coder-7b", "CoT-SFT_only", "DeepSeek-7B\nCoT-SFT"),
-    ("deepseek-coder-7b", "CoT-SFT_RLVR", "DeepSeek-7B\nCoT-RLVR"),
-    ("LLMs/gpt-4o", "", "GPT-4o"),
+    ("deepseek-coder-1b", "instruct-no-fine-tuning", "DeepSeek-1B"),
+    ("deepseek-coder-1b", "CoT-SFT_only", "DeepSeek-1B\n + SFT"),
+    ("deepseek-coder-7b", "instruct-no-fine-tuning", "DeepSeek-7B"),
+    ("deepseek-coder-7b", "CoT-SFT_only", "DeepSeek-7B\n + SFT"),
+    ("deepseek-coder-7b", "CoT-SFT_RLVR", "DeepSeek-7B\n + SFT + RLVR\n(Ours)"),
+    ("LLMs", "gpt-4o", "GPT-4o"),
 ]
 
 # Color scheme matching the reference plot
@@ -27,8 +27,9 @@ COLORS = {
     'correct': '#5B9BD5',  # blue
     'correct_not_secure': '#70AD47',  # green
     'incorrect': '#FFA500',  # orange
-    'syntax_error': '#9370DB',  # purple
-    'other_error': '#A9A9A9'  # gray
+    # 'syntax_error': '#9370DB',  # purple
+    # 'other_error': '#A9A9A9',  # gray
+    'code_error': '#9370DB',  # tomato red
 }
 
 # Display labels for legend
@@ -36,8 +37,9 @@ LABELS = {
     'correct': 'correct',
     'correct_not_secure': 'correct (not secure)',
     'incorrect': 'incorrect',
-    'syntax_error': 'syntax error',
-    'other_error': 'other error'
+    # 'syntax_error': 'syntax error',
+    # 'other_error': 'other error',
+    'code_error': 'code error',
 }
 
 
@@ -49,6 +51,8 @@ def categorize_result(result):
     - correct: All tests (capability + safety) passed
     - correct_not_secure: Capability tests passed but safety tests failed
     - incorrect: Capability tests failed (functional errors)
+    - code_error: Code execution errors (syntax or runtime)
+    (deprecated)
     - syntax_error: Syntax errors (0 tests run)
     - other_error: Other types of errors
     """
@@ -56,18 +60,21 @@ def categorize_result(result):
     if result['total_tests'] == 0 and len(result.get('errors', [])) > 0:
         # Check if it's a syntax error
         for error in result['errors']:
-            error_msg = error.get('error_message', '')
-            error_reason = error.get('reason', '')
-            if 'SyntaxError' in error_msg or 'invalid syntax' in error_msg:
-                return 'syntax_error'
+            # error_msg = error.get('error_message', '')
+            # error_reason = error.get('reason', '')
+            # if 'SyntaxError' in error_msg or 'invalid syntax' in error_msg:
+            #     return 'syntax_error'
             # print(f"Debug: Other error message found: {error_msg}")
             # print(f"Debug: Error reason: {error_reason}")
-        return 'other_error'
+            # return 'other_error'
+            return 'code_error'
     
+    # Label to match with SeCodePLT: "correct" 
     # All tests passed (both capability and safety)
     if result['status'] == 'all_passed':
         return 'correct'
     
+    # Label to match with SeCodePLT: "correct_not_secure"
     # Partial pass - differentiate between capability and safety failures
     if result['status'] == 'partial_passed':
         cap = result.get('capability', {})
@@ -86,15 +93,18 @@ def categorize_result(result):
         # Default to incorrect for other partial pass cases
         return 'incorrect'
     
+    # Label to match with SeCodePLT: "incorrect"
     # All tests failed
     if result['status'] == 'all_failed':
         # Check if it's due to syntax error (0 tests run)
         if result['total_tests'] == 0:
-            return 'syntax_error'
+            # return 'syntax_error'
+            return 'code_error'
         return 'incorrect'
     
     # Fallback for unexpected cases
-    return 'other_error'
+    # return 'other_error'
+    return 'code_error'
 
 
 def process_results(json_path):
@@ -119,8 +129,9 @@ def process_results(json_path):
         'correct': 0,
         'correct_not_secure': 0,
         'incorrect': 0,
-        'syntax_error': 0,
-        'other_error': 0
+        # 'syntax_error': 0,
+        # 'other_error': 0,
+        'code_error': 0,
     }
     
     # Categorize each result
@@ -161,8 +172,10 @@ def create_plot(data, output_path='secure_code_completion_plot.png'):
     bottom = np.zeros(len(labels))
     
     # Stack bars in order
+    # category_order = ['correct', 'correct_not_secure', 'incorrect', 
+    #                   'syntax_error', 'other_error']
     category_order = ['correct', 'correct_not_secure', 'incorrect', 
-                      'syntax_error', 'other_error']
+                      'code_error']
     
     for cat in category_order:
         values = [d['percentages'][cat] for d in data]
@@ -183,7 +196,8 @@ def create_plot(data, output_path='secure_code_completion_plot.png'):
                        f'{int(val)}',
                        ha='center', va='center', 
                        fontsize=10, fontweight='bold',
-                       color='white' if cat == 'syntax_error' else 'black')
+                    #    color='white' if cat == 'syntax_error' else 'black')
+                       color='white' if cat == 'code_error' else 'black')
         
         bottom += values
     
@@ -192,6 +206,14 @@ def create_plot(data, output_path='secure_code_completion_plot.png'):
     ax.set_title('Python', fontsize=14, fontweight='bold')
     ax.set_xticks(x)
     ax.set_xticklabels(labels, rotation=45, ha='right', fontsize=10)
+    # Make the RLVR label bold
+    tick_labels = ax.get_xticklabels()
+    for tick_label in tick_labels:
+        if 'RLVR' in tick_label.get_text():
+            tick_label.set_weight('bold')
+            # tick_label.set_color('#FF4500')  # Optional: change color to highlight
+            # change actual background color of label like a highlight
+            tick_label.set_bbox(dict(facecolor='#FFFFE0', edgecolor='none', pad=2.0))
     ax.set_ylim(0, 100)
     ax.legend(loc='upper left', bbox_to_anchor=(1.02, 1), frameon=True)
     ax.grid(axis='y', alpha=0.3, linestyle='--')
@@ -240,8 +262,10 @@ def main():
             if args.verbose:
                 print(f"\n{label}:")
                 print(f"  Total tasks: {total}")
+                # for cat in ['correct', 'correct_not_secure', 'incorrect', 
+                #            'syntax_error', 'other_error']:
                 for cat in ['correct', 'correct_not_secure', 'incorrect', 
-                           'syntax_error', 'other_error']:
+                           'code_error']:
                     print(f"  {LABELS[cat]}: {counts[cat]} ({percentages[cat]:.1f}%)")
             else:
                 print(f"{label}: {total} tasks processed")
