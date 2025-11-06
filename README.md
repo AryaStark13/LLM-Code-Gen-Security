@@ -45,7 +45,7 @@ _merge_results \
 
 python -m cweval.evaluate \
 report_pass_at_k \
---eval_path evals/eval_deepseek-coder-7b__CoT-SFT_RLVR \
+--eval_path evals/eval_LLMs__gpt-4o \
 --k 1 \
 --lang core/py/
 

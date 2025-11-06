@@ -13,3 +13,6 @@ pycryptodome
 docker
 numpy
 p_tqdm
+bcrypt
+cryptography
+python-jose[cryptography]
