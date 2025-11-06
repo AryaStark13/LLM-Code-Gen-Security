@@ -8,9 +8,10 @@ from datetime import datetime
 from tqdm import tqdm
 
 sys.path.append(os.path.abspath(".."))
-from utils.llms import OpenAI, Gemini
+from utils.llms import OpenAI
 
-DATASET = "ShethArihant/SeCodePLT-updated-CoT-v4"
+# DATASET = "ShethArihant/SeCodePLT-updated-CoT-v4"
+DATASET = "ShethArihant/CWEval-v1"
 
 
 def extract_code_from_response(response):
@@ -34,7 +35,7 @@ def process_dataset(model_name, output_file=None):
     
     # Load the dataset
     print(f"Loading dataset: {DATASET}")
-    eval_dataset = load_dataset(DATASET, split="test")
+    eval_dataset = load_dataset(DATASET, split="python")
     
     total_examples = len(eval_dataset)
     print(f"Total examples to process: {total_examples}")
@@ -54,12 +55,16 @@ def process_dataset(model_name, output_file=None):
             # Build the result object
             result = {
                 "index": idx,
+                "task_id": example.get("task_id", ""),
                 "id": example.get("id", idx),
                 "CWE_ID": example.get("CWE_ID", None),
                 "prompt": prompt,
-                "ground_truth_cot": example.get("ground_truth_thinking", ""),
-                "ground_truth_code": example.get("ground_truth_code", ""),
-                "ground_truth_full": example.get("ground_truth_thinking", "") + example.get("ground_truth_code", ""),
+                # "ground_truth_cot": example.get("ground_truth_thinking", ""),
+                # "ground_truth_code": example.get("ground_truth_code", ""),
+                # "ground_truth_full": example.get("ground_truth_thinking", "") + example.get("ground_truth_code", ""),
+                "ground_truth_cot": example.get("cot_steps", ""),
+                "ground_truth_code": example.get("completion", "")[0]["content"],
+                "ground_truth_full": example.get("cot_steps", "") + example.get("completion", "")[0]["content"],
                 "y_negative": example.get("y_negative", ""),
                 "output_with_tuning": message,
                 "processed_at": processed_count + 1,
@@ -74,11 +79,15 @@ def process_dataset(model_name, output_file=None):
             result = {
                 "index": idx,
                 "id": example.get("id", idx),
+                "task_id": example.get("task_id", ""),
                 "CWE_ID": example.get("CWE_ID", None),
                 "prompt": example.get("prompt", ""),
-                "ground_truth_cot": example.get("ground_truth_thinking", ""),
-                "ground_truth_code": example.get("ground_truth_code", ""),
-                "ground_truth_full": example.get("ground_truth_thinking", "") + example.get("ground_truth_code", ""),
+                # "ground_truth_cot": example.get("ground_truth_thinking", ""),
+                # "ground_truth_code": example.get("ground_truth_code", ""),
+                # "ground_truth_full": example.get("ground_truth_thinking", "") + example.get("ground_truth_code", ""),
+                "ground_truth_cot": example.get("cot_steps", ""),
+                "ground_truth_code": example.get("completion", "")[0]["content"],
+                "ground_truth_full": example.get("cot_steps", "") + example.get("completion", "")[0]["content"],
                 "y_negative": example.get("y_negative", ""),
                 "output_with_tuning": f"ERROR: {str(e)}",
                 "processed_at": processed_count + 1,
@@ -125,13 +134,13 @@ def main():
     parser.add_argument(
         "--model_name",
         type=str,
-        default="gemini-1.5-pro-002",
+        default="gpt-4o-2024-08-06",
         help="Name of the model to use (e.g., 'gpt-4o-2024-08-06')"
     )
     parser.add_argument(
         "-o", "--output",
         type=str,
-        default="results/CoT_SFT/LLMs/gemini-1.5-pro/",
+        default="results/CWEval/LLMs/gpt-4o/CWEval_Results.json",
         help="Output JSON file path (default: auto-generated filename)"
     )
     
