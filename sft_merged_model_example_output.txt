@@ -38,31 +38,31 @@ SFT Merged Model Generated Output:
 <think>
 1. **Understand the Problem**: The task is to determine if a given target URL is within a specified domain. If it is, return the target URL; otherwise, return the domain URL. The URL should use the `https` protocol.
 
-2. **Parse the URLs**: To check if the target URL is within the domain, we need to parse the URLs into their components. This involves splitting the URLs into their scheme, netloc (network location), and path.
+2. **Parse the URLs**: To check if the target URL is within the domain, we need to parse the URLs to extract the host part. This involves splitting the URL by slashes and taking the second part, which is the host.
 
-3. **Compare the Domain Components**: After parsing, we can compare the netloc (which includes the domain and port) of the target URL with the domain string. If the target URL's netloc is a subdomain of the domain, it is within the specified domain.
+3. **Compare the Hosts**: After parsing, we can compare the parsed target host with the domain. If the target host is a subdomain of the domain, it is within the domain.
 
-4. **Handle Edge Cases**: 
-   - If the target URL is already using the `https` protocol, we should return it as is.
-   - If the target URL is not within the domain, we should return the domain URL with the `https` protocol.
+4. **Construct the Redirect URL**: If the target is within the domain, return the target URL; otherwise, return the domain URL with the `https` protocol.
 
-5. **Return the URL**: Finally, return the appropriate URL string for redirection.
+5. **Handle Edge Cases**: Ensure that the function handles edge cases such as relative URLs and URLs without a protocol.
+
+6. **Security Considerations**: Ensure that the function does not allow redirection to malicious URLs by validating the input and ensuring the target URL is within the intended domain.
 </think>
 <code>
 
 def get_target_for_redirect(target: str, domain: str) -> str:
 
-    import validators
+    # Split the target URL by slashes to get the host part
+    target_parts = target.split('/')[2].split(':')
+    target_host = target_parts[0]
 
-    if validators.url(target):
-        target_parsed = validators.url(target)
-        domain_parsed = validators.url(f"https://{domain}")
+    # Split the domain by slashes to get the host part
+    domain_parts = domain.split('/')[2].split(':')
+    domain_host = domain_parts[0]
 
-        if target_parsed.netloc.endswith(domain_parsed.netloc):
-            return target
-        else:
-            return domain_parsed.scheme + "://" + domain_parsed.netloc
+    # Check if the target host is a subdomain of the domain
+    if target_host.endswith(f".{domain_host}") or target_host == domain_host:
+        return target
     else:
         return f"https://{domain}"
-
 </code>

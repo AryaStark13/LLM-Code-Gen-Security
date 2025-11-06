@@ -24,34 +24,42 @@ Replace `<model-name>` with the actual name of the model whose results you want 
 # Navigate to the root directory of the project
 # the parent directory should point to the model results folder present in ./results/CWEval/*
 # this should contain a file named CWEval_Results.json
-python -m scripts.convert_cweval_json_to_eval \
---parent LLMs/gpt-4o
+python3 -m scripts.convert_cweval_json_to_eval \
+--parent deepseek-coder-7b/CoT-SFT_RLVR-2
 ```
 
 2. 
 ```bash
 cd utils/CWEval
+export EVAL_PATH=evals/<eval-path>
+export EVAL_PATH=evals/eval_deepseek-coder-7b__<variant>
+export EVAL_PATH=evals/eval_deepseek-coder-1b__<variant>
+export EVAL_PATH=evals/eval_LLMs__<variant>
+
+# Copy the task & test py files into the same folder as the generated outputs
+python3 -m cweval.evaluate parse_generated \
+--eval_path $EVAL_PATH
 
 # Run Tests for python only
 # eval_path is created in step 1 in the following format: evals/eval_<parent>__<model-name>
-# run_tests will execute tests for only the specified language
-python -m cweval.evaluate run_tests \
---eval_path evals/eval_LLMs__gpt-4o
+# run_tests will execute tests for only the language present
+python3 -m cweval.evaluate run_tests \
+--eval_path $EVAL_PATH
 
 # Now execute merge results
-python -m cweval.evaluate \
+python3 -m cweval.evaluate \
 _merge_results \
---eval_path evals/eval_LLMs__gpt-4o
+--eval_path $EVAL_PATH
 
 python -m cweval.evaluate \
 report_pass_at_k \
---eval_path evals/eval_LLMs__gpt-4o \
+--eval_path $EVAL_PATH \
 --k 1 \
 --lang core/py/
 
 ### ONLY for running the full pipeline (all languages) ###
 # pipeline will execute tests for all languages
 python cweval/evaluate.py pipeline \
---eval_path evals/eval_LLMs__gpt-4o \
+--eval_path $EVAL_PATH \
 --langs py
 ```

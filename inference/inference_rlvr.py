@@ -8,6 +8,7 @@ from transformers import StoppingCriteria, StoppingCriteriaList
 from datasets import load_dataset
 import json
 from tabulate import tabulate
+import os
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -71,6 +72,9 @@ def generate_output(prompt: str, model, tokenizer, stopping_criteria, max_new_to
 
 def run_full_evaluation(model, tokenizer, stopping_criteria, eval_dataset, output_file="evaluation_results.json"):
     """Run evaluation on the full dataset and save results as JSON"""
+    output_dir = os.path.dirname(output_file)
+    os.makedirs(output_dir, exist_ok=True)
+
     results = []
     
     for i in range(len(eval_dataset)):
@@ -179,11 +183,12 @@ def main():
         model_name=args.base_model,
         max_seq_length=2048,
         dtype=None,
-        load_in_4bit=True,  # Use 4-bit to save memory
+        load_in_4bit=False,  # Use 4-bit to save memory
     )
 
     # Load SFT LoRA adapter directly onto the Unsloth model
     model = PeftModel.from_pretrained(model, args.sft_lora_adapter)
+    model = model.merge_and_unload()
 
     # Then load GRPO LoRA adapter
     model = PeftModel.from_pretrained(model, args.grpo_lora_adapter)

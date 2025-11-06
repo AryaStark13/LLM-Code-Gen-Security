@@ -141,7 +141,7 @@ def main():
 
     stop_sequence_ids = tokenizer.encode("</code>", add_special_tokens=False)
     stopping_criteria = StoppingCriteriaList([CustomStopCriteria(stop_sequence_ids)])
-    print("Model is ready for inference with GRPO LoRA adapter.")
+    print("Model is ready for inference with SFT LoRA adapter.")
     print(f"Total parameters in the model: {sum(p.numel() for p in sft_merged_model.parameters()):,}")
 
     # Load evaluation dataset

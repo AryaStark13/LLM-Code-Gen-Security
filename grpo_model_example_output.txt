@@ -35,30 +35,26 @@ Your final code implementation here...
 
 
 GRPO Model Generated Output:
-
-**Note:**
-- The provided target URL string and domain string will always be valid.
-- The provided target URL string will always start with 'https://'.
-- The provided domain string will always not start with 'https://'.
-- The provided domain string will always end with a top-level domain like '.com', '.net', etc.
-- The provided domain string will always be a subdomain of the provided target URL string.
-
-**Test Cases:**
-- get_target_for_redirect('https://music.example.com', 'example.com') -> 'https://music.example.com'
-- get_target_for_redirect('https://example.com/service', 'example.com') -> 'https://example.com/service'
-- get_target_for_redirect('https://blog.example.com/posts', 'example.com') -> 'https://blog.example.com/posts'
-- get_target_for_redirect('https://another.com', 'example.com') -> 'https://example.com'
-
 <think>
-1. We need to check if the target URL is within the domain.
-2. If it is, we return the target URL.
-3. If it's not, we return the domain URL.
-4. We need to ensure that we always return the URL with the 'https' protocol.
-</think>
+1. **Input Validation**: Ensure that the input URLs are valid and that the domain is correctly formatted without a protocol.
 
+2. **URL Parsing**: Parse the target URL to extract the domain and ensure it matches the provided domain.
+
+3. **Security Consideration**: Ensure that the function does not allow redirection to malicious or unintended domains.
+
+4. **Fallback Logic**: If the target URL is not within the provided domain, return the domain URL with the https protocol.
+
+5. **Output Format**: Ensure the function returns the URL in the correct format with the https protocol.
+</think>
 <code>
 def get_target_for_redirect(target: str, domain: str) -> str:
-    if domain in target:
+
+    from urllib.parse import urlparse
+
+    target_url = urlparse(target)
+    target_domain = target_url.netloc
+
+    if target_domain == domain:
         return target
     else:
         return 'https://' + domain

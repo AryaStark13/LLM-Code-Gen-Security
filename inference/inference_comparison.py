@@ -232,6 +232,7 @@ def main():
 
     # Load SFT LoRA adapter directly onto the Unsloth model
     model = PeftModel.from_pretrained(model, args.sft_lora_adapter)
+    model = model.merge_and_unload()
     print("Model is ready for inference with SFT LoRA adapter.")
     print(f"Total parameters in the model: {sum(p.numel() for p in model.parameters()):,}")
 
@@ -245,18 +246,18 @@ def main():
         f.write(sft_generated_output + "\n")
     print("SFT merged model output generated and saved to sft_merged_model_example_output.txt")
 
-    del model, tokenizer
-    torch.cuda.empty_cache()
-    gc.collect()
+    # del model, tokenizer
+    # torch.cuda.empty_cache()
+    # gc.collect()
 
-    # reload base model
-    print("re-loading base model")
-    model, tokenizer = FastLanguageModel.from_pretrained(
-        model_name=args.base_model,
-        max_seq_length=2048,
-        dtype=None,
-        load_in_4bit=False,  # Use 4-bit to save memory
-    )
+    # # reload base model
+    # print("re-loading base model")
+    # model, tokenizer = FastLanguageModel.from_pretrained(
+    #     model_name=args.base_model,
+    #     max_seq_length=2048,
+    #     dtype=None,
+    #     load_in_4bit=False,  # Use 4-bit to save memory
+    # )
 
     # Then load GRPO LoRA adapter
     model = PeftModel.from_pretrained(model, args.grpo_lora_adapter)
