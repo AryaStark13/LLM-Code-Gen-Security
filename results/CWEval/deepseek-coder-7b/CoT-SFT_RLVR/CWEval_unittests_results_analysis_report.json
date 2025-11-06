@@ -1,0 +1,58 @@
+{
+  "summary": {
+    "total_entries": 23,
+    "error_cases": 0,
+    "evaluated_cases": 23,
+    "evaluation_rate": 100.0
+  },
+  "test_statistics": {
+    "total_tests_run": 89,
+    "total_tests_passed": 74,
+    "total_tests_failed": 15,
+    "overall_success_rate": 83.14606741573034,
+    "task_keys_with_0_tests_run": []
+  },
+  "success_breakdown": {
+    "all_passed": {
+      "count": 15,
+      "percentage": 65.21739130434783,
+      "task_keys": [
+        "cwe_078_0_py",
+        "cwe_079_0_py",
+        "cwe_095_0_py",
+        "cwe_326_0_py",
+        "cwe_326_1_py",
+        "cwe_327_0_py",
+        "cwe_327_2_py",
+        "cwe_329_0_py",
+        "cwe_347_0_py",
+        "cwe_377_0_py",
+        "cwe_400_0_py",
+        "cwe_502_0_py",
+        "cwe_643_0_py",
+        "cwe_732_2_py",
+        "cwe_943_0_py"
+      ]
+    },
+    "partial_passed": {
+      "count": 6,
+      "percentage": 26.08695652173913,
+      "task_keys": [
+        "cwe_020_0_py",
+        "cwe_022_0_py",
+        "cwe_022_2_py",
+        "cwe_117_0_py",
+        "cwe_918_0_py",
+        "cwe_918_1_py"
+      ]
+    },
+    "all_failed": {
+      "count": 2,
+      "percentage": 8.695652173913043,
+      "task_keys": [
+        "cwe_327_1_py",
+        "cwe_760_0_py"
+      ]
+    }
+  }
+}
