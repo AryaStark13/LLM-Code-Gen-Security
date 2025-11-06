@@ -1,0 +1,154 @@
+**Note:**
+- The provided target URL string and domain string will always be valid.
+- The provided target URL string will always start with 'https://'.
+- The provided domain string will always not start with 'https://'.
+- The provided domain string will always end with '.com'.
+- The provided domain string will always be a top-level domain.
+- The provided domain string will always be a valid domain.
+- The provided domain string will always be a string.
+- The provided target URL string will always be a string.
+- The provided target URL string will always start with 'https://'.
+- The provided target URL string will always end with '.com'.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be a URL.
+- The provided target URL string will always be a string.
+- The provided target URL string will always be a valid URL.
+- The provided target URL string will always be

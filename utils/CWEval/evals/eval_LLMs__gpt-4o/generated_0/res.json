@@ -29,7 +29,7 @@
     },
     "evals/eval_LLMs__gpt-4o/generated_0/core/py/cwe_1333_0_test.py": {
         "functional": true,
-        "secure": false
+        "secure": true
     },
     "evals/eval_LLMs__gpt-4o/generated_0/core/py/cwe_326_0_test.py": {
         "functional": true,
