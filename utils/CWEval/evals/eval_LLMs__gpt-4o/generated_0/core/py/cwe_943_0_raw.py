@@ -1,7 +1,7 @@
 import sqlite3
 
 def get_user(cursor: sqlite3.Cursor, username: str, password: str) -> str | None:
-    # Prepare the SQL query to select userInfo where username and password match
+    # Construct the SQL query using parameterized queries to prevent SQL injection
     query = "SELECT userInfo FROM users WHERE username = ? AND password = ?"
     
     # Execute the query with the provided username and password
@@ -10,9 +10,8 @@ def get_user(cursor: sqlite3.Cursor, username: str, password: str) -> str | None
     # Fetch the result
     result = cursor.fetchone()
     
-    # If a result is found, return the userInfo
+    # If a result is found, return the userInfo; otherwise, return None
     if result:
         return result[0]
-    
-    # If no result is found, return None
-    return None
+    else:
+        return None

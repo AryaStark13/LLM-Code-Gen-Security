@@ -24,7 +24,7 @@ Replace `<model-name>` with the actual name of the model whose results you want 
 # Navigate to the root directory of the project
 # the parent directory should point to the model results folder present in ./results/CWEval/*
 # this should contain a file named CWEval_Results.json
-python scripts/convert_cweval_json_to_eval.py \
+python -m scripts.convert_cweval_json_to_eval \
 --parent LLMs/gpt-4o
 ```
 

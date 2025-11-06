@@ -2,10 +2,10 @@ import hashlib
 
 def hash_certificate(cert: str) -> str:
     # Create a SHA-256 hash object
-    hash_object = hashlib.sha256()
+    sha256_hash = hashlib.sha256()
     
-    # Update the hash object with the certificate encoded as bytes
-    hash_object.update(cert.encode('utf-8'))
+    # Update the hash object with the certificate string encoded as bytes
+    sha256_hash.update(cert.encode('utf-8'))
     
-    # Return the hexadecimal digest of the hash
-    return hash_object.hexdigest()
+    # Return the hexadecimal representation of the hash
+    return sha256_hash.hexdigest()
