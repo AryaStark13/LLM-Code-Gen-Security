@@ -14,13 +14,22 @@ import argparse
 
 # Define model configurations: (model_folder, variant_folder, display_label)
 MODEL_CONFIGS = [
-    ("deepseek-coder-1b", "instruct-no-fine-tuning", "DeepSeek-1B"),
-    ("deepseek-coder-1b", "CoT-SFT_only", "DeepSeek-1B\n + SFT"),
-    ("deepseek-coder-7b", "instruct-no-fine-tuning", "DeepSeek-7B"),
-    ("deepseek-coder-7b", "CoT-SFT_only", "DeepSeek-7B\n + SFT"),
+    # ("deepseek-coder-1b", "instruct-no-fine-tuning", "DeepSeek-1B"),
+    # ("deepseek-coder-1b", "CoT-SFT_only", "DeepSeek-1B\n + SFT"),
+    # ("deepseek-coder-7b", "instruct-no-fine-tuning", "DeepSeek-7B"),
+    # ("deepseek-coder-7b", "CoT-SFT_only", "DeepSeek-7B\n + SFT"),
     ("deepseek-coder-7b", "CoT-SFT_RLVR", "DeepSeek-7B\n + SFT + RLVR\n(Ours)"),
     ("LLMs", "gpt-4o", "GPT-4o"),
 ]
+
+# MODEL_CONFIGS = [
+#     ("deepseek-coder-1b", "instruct-no-fine-tuning", "DeepSeek-1B"),
+#     ("deepseek-coder-1b", "CoT-SFT_only", "DeepSeek-1B\n + SFT"),
+#     ("deepseek-coder-7b", "instruct-no-fine-tuning", "DeepSeek-7B"),
+#     ("deepseek-coder-7b", "CoT-SFT_only", "DeepSeek-7B\n + SFT"),
+#     ("deepseek-coder-7b", "CoT-SFT_RLVR", "DeepSeek-7B\n + SFT + RLVR\n(Ours)"),
+#     ("LLMs", "gpt-4o", "GPT-4o"),
+# ]
 
 # Color scheme matching the reference plot
 COLORS = {
@@ -140,12 +149,19 @@ def process_results(json_path):
         counts[category] += 1
     
     # Calculate percentages
-    total = 386  # Fixed total number of tasks
-    total = len(results)
+    total = 25  # Fixed total number of tasks
+    # total = 386  # Fixed total number of tasks
+    # total = len(results)
     percentages = {
         cat: (count / total * 100) if total > 0 else 0 
         for cat, count in counts.items()
     }
+
+    # set remaining to other_error: total - len(results)
+    remaining = total - len(results)
+    if remaining > 0:
+        counts['code_error'] += remaining
+        percentages['code_error'] = (counts['code_error'] / total * 100)
     
     return percentages, counts, total
 
@@ -245,9 +261,11 @@ def main():
     for model_name, variant, label in MODEL_CONFIGS:
         # Construct path to results file
         if variant:
-            json_path = base_path / model_name / variant / "SeCodePLT_unittests_results.json"
+            # json_path = base_path / model_name / variant / "SeCodePLT_unittests_results.json"
+            json_path = base_path / model_name / variant / "CWEval_unittests_results.json"
         else:
-            json_path = base_path / model_name / "SeCodePLT_unittests_results.json"
+            # json_path = base_path / model_name / "SeCodePLT_unittests_results.json"
+            json_path = base_path / model_name / "CWEval_unittests_results.json"
         
         percentages, counts, total = process_results(json_path)
         
