@@ -5,3 +5,5 @@ __pycache__/
 *playground*
 data/SecCodePLT/data/SeCodePLT-updated-CoT-v4/
 plots-og/
+models/*
+unsloth_compiled_cache/

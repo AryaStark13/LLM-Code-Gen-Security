@@ -10,6 +10,7 @@ from datasets import load_dataset
 import json
 import pdb
 from tabulate import tabulate
+import gc
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -153,15 +154,74 @@ def main():
         split=args.split
     )
 
-    # Load base model
-    print("Loading base model and tokenizer...")
-    base_model, tokenizer = load_base_model_and_tokenizer(args.base_model)
+    # # Load base model
+    # print("Loading base model and tokenizer...")
+    # base_model, tokenizer = load_base_model_and_tokenizer(args.base_model)
+
+    # stop_sequence_ids = tokenizer.encode("</code>", add_special_tokens=False)
+    # stopping_criteria = StoppingCriteriaList([CustomStopCriteria(stop_sequence_ids)])
+    # example_prompt = eval_dataset[0]["prompt"][0]["content"]
+    # print("Generating output from base model...")
+    # base_generated_output = generate_output(example_prompt, base_model, tokenizer, stopping_criteria)
+    # # save output to a text file
+    # with open("base_model_example_output.txt", "w") as f:
+    #     f.write("Example Prompt:\n")
+    #     f.write(example_prompt + "\n\n")
+    #     f.write("Base Model Generated Output:\n")
+    #     f.write(base_generated_output + "\n")
+    # print("Base model output generated and saved to base_model_example_output.txt")
+
+    # # Load SFT LoRA adapter
+    # print("Loading SFT LoRA adapter...")
+    # sft_lora_model = load_sft_lora_adapter(base_model, args.sft_lora_adapter)
+
+    # # Merge SFT LoRA adapter into base model
+    # print("Merging SFT LoRA adapter...")
+    # sft_merged_model = merge_sft_lora_adapter(sft_lora_model)
+
+    # print("Generating output from SFT merged model...")
+    # sft_generated_output = generate_output(example_prompt, sft_merged_model, tokenizer, stopping_criteria)
+    # # save output to a text file
+    # with open("sft_merged_model_example_output.txt", "w") as f:
+    #     f.write("Example Prompt:\n")
+    #     f.write(example_prompt + "\n\n")
+    #     f.write("SFT Merged Model Generated Output:\n")
+    #     f.write(sft_generated_output + "\n")
+    # print("SFT merged model output generated and saved to sft_merged_model_example_output.txt")
+
+    # # Save SFT merged model
+    # print("Saving SFT merged model...")
+    # save_sft_merged_model(sft_merged_model, tokenizer, args.output)
+
+    # # Delete SFT merged model from memory
+    # print("Deleting SFT merged model from memory...")
+    # del sft_merged_model, tokenizer, base_model, sft_lora_model
+
+    # # Load Base + SFT LoRA model using Unsloth
+    # print("Loading Base + SFT LoRA model using Unsloth...")
+    # model, tokenizer = load_and_merge_grpo_lora_adapter(
+    #     sft_merged_model_path=args.output,
+    #     grpo_lora_adapter_path=args.grpo_lora_adapter,
+    #     max_seq_length=2048,
+    #     load_in_4bit=False
+    # )
+
+    # Load base model with Unsloth directly
+    model, tokenizer = FastLanguageModel.from_pretrained(
+        model_name=args.base_model,
+        max_seq_length=2048,
+        dtype=None,
+        load_in_4bit=False,  # Use 4-bit to save memory
+    )
+    print("Base Model is ready for inference.")
+    print(f"Total parameters in the model: {sum(p.numel() for p in model.parameters()):,}")
 
     stop_sequence_ids = tokenizer.encode("</code>", add_special_tokens=False)
     stopping_criteria = StoppingCriteriaList([CustomStopCriteria(stop_sequence_ids)])
     example_prompt = eval_dataset[0]["prompt"][0]["content"]
+
     print("Generating output from base model...")
-    base_generated_output = generate_output(example_prompt, base_model, tokenizer, stopping_criteria)
+    base_generated_output = generate_output(example_prompt, model, tokenizer, stopping_criteria)
     # save output to a text file
     with open("base_model_example_output.txt", "w") as f:
         f.write("Example Prompt:\n")
@@ -170,16 +230,13 @@ def main():
         f.write(base_generated_output + "\n")
     print("Base model output generated and saved to base_model_example_output.txt")
 
-    # Load SFT LoRA adapter
-    print("Loading SFT LoRA adapter...")
-    sft_lora_model = load_sft_lora_adapter(base_model, args.sft_lora_adapter)
-
-    # Merge SFT LoRA adapter into base model
-    print("Merging SFT LoRA adapter...")
-    sft_merged_model = merge_sft_lora_adapter(sft_lora_model)
+    # Load SFT LoRA adapter directly onto the Unsloth model
+    model = PeftModel.from_pretrained(model, args.sft_lora_adapter)
+    print("Model is ready for inference with SFT LoRA adapter.")
+    print(f"Total parameters in the model: {sum(p.numel() for p in model.parameters()):,}")
 
     print("Generating output from SFT merged model...")
-    sft_generated_output = generate_output(example_prompt, sft_merged_model, tokenizer, stopping_criteria)
+    sft_generated_output = generate_output(example_prompt, model, tokenizer, stopping_criteria)
     # save output to a text file
     with open("sft_merged_model_example_output.txt", "w") as f:
         f.write("Example Prompt:\n")
@@ -188,22 +245,22 @@ def main():
         f.write(sft_generated_output + "\n")
     print("SFT merged model output generated and saved to sft_merged_model_example_output.txt")
 
-    # Save SFT merged model
-    print("Saving SFT merged model...")
-    save_sft_merged_model(sft_merged_model, tokenizer, args.output)
+    del model, tokenizer
+    torch.cuda.empty_cache()
+    gc.collect()
 
-    # Delete SFT merged model from memory
-    print("Deleting SFT merged model from memory...")
-    del sft_merged_model, tokenizer, base_model, sft_lora_model
-
-    # Load Base + SFT LoRA model using Unsloth
-    print("Loading Base + SFT LoRA model using Unsloth...")
-    model, tokenizer = load_and_merge_grpo_lora_adapter(
-        sft_merged_model_path=args.output,
-        grpo_lora_adapter_path=args.grpo_lora_adapter,
+    # reload base model
+    print("re-loading base model")
+    model, tokenizer = FastLanguageModel.from_pretrained(
+        model_name=args.base_model,
         max_seq_length=2048,
-        load_in_4bit=False
+        dtype=None,
+        load_in_4bit=False,  # Use 4-bit to save memory
     )
+
+    # Then load GRPO LoRA adapter
+    model = PeftModel.from_pretrained(model, args.grpo_lora_adapter)
+    model.eval()
 
     stop_sequence_ids = tokenizer.encode("</code>", add_special_tokens=False)
     stopping_criteria = StoppingCriteriaList([CustomStopCriteria(stop_sequence_ids)])

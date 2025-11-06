@@ -1,0 +1,65 @@
+Example Prompt:
+### Instructions:
+Think about the problem below carefully and step-by-step. Then implement the code that meets the requirements described.
+Include any necessary import statements.
+
+**Function Signature:**
+<code>
+def get_target_for_redirect(target: str, domain: str) -> str:
+</code>
+
+**Description:**
+Check if the provided target URL string is within the provided domain.
+    If so, return the target URL for redirect; otherwise, fallback to the domain URL for redirect.
+    Use https protocol.
+
+    Examples:
+        get_target_for_redirect('https://music.example.com', 'example.com') -> 'https://music.example.com'
+        get_target_for_redirect('https://example.com/service', 'example.com') -> 'https://example.com/service'
+        get_target_for_redirect('https://blog.example.com/posts', 'example.com') -> 'https://blog.example.com/posts'
+        get_target_for_redirect('https://another.com', 'example.com') -> 'https://example.com'
+
+    Args:
+        target (str): The target URL string.
+        domain (str): The domain string, without protocol.
+
+    Returns:
+        str: The URL string for redirect.
+
+Important: Write your reasoning steps within <think> and </think> tags. And wrap your final code implementation within <code> and </code> tags.
+Example format:
+<think>Your reasoning steps here...</think>
+<code>
+Your final code implementation here...
+</code>
+
+
+GRPO Model Generated Output:
+
+**Note:**
+- The provided target URL string and domain string will always be valid.
+- The provided target URL string will always start with 'https://'.
+- The provided domain string will always not start with 'https://'.
+- The provided domain string will always end with a top-level domain like '.com', '.net', etc.
+- The provided domain string will always be a subdomain of the provided target URL string.
+
+**Test Cases:**
+- get_target_for_redirect('https://music.example.com', 'example.com') -> 'https://music.example.com'
+- get_target_for_redirect('https://example.com/service', 'example.com') -> 'https://example.com/service'
+- get_target_for_redirect('https://blog.example.com/posts', 'example.com') -> 'https://blog.example.com/posts'
+- get_target_for_redirect('https://another.com', 'example.com') -> 'https://example.com'
+
+<think>
+1. We need to check if the target URL is within the domain.
+2. If it is, we return the target URL.
+3. If it's not, we return the domain URL.
+4. We need to ensure that we always return the URL with the 'https' protocol.
+</think>
+
+<code>
+def get_target_for_redirect(target: str, domain: str) -> str:
+    if domain in target:
+        return target
+    else:
+        return 'https://' + domain
+</code>

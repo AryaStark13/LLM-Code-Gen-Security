@@ -145,34 +145,49 @@ def main():
     parser.add_argument("--grpo_lora_adapter", type=str, default="lindafei001/deepseek-7b-grpo-20epochs")
     args = parser.parse_args()
 
-    # Load base model
-    print("Loading base model and tokenizer...")
-    base_model, tokenizer = load_base_model_and_tokenizer(args.base_model)
+    # # Load base model
+    # print("Loading base model and tokenizer...")
+    # base_model, tokenizer = load_base_model_and_tokenizer(args.base_model)
 
-    # Load SFT LoRA adapter
-    print("Loading SFT LoRA adapter...")
-    sft_lora_model = load_sft_lora_adapter(base_model, args.sft_lora_adapter)
+    # # Load SFT LoRA adapter
+    # print("Loading SFT LoRA adapter...")
+    # sft_lora_model = load_sft_lora_adapter(base_model, args.sft_lora_adapter)
 
-    # Merge SFT LoRA adapter into base model
-    print("Merging SFT LoRA adapter...")
-    sft_merged_model = merge_sft_lora_adapter(sft_lora_model)
+    # # Merge SFT LoRA adapter into base model
+    # print("Merging SFT LoRA adapter...")
+    # sft_merged_model = merge_sft_lora_adapter(sft_lora_model)
 
-    # Save SFT merged model
-    print("Saving SFT merged model...")
-    save_sft_merged_model(sft_merged_model, tokenizer, args.output)
+    # # Save SFT merged model
+    # print("Saving SFT merged model...")
+    # save_sft_merged_model(sft_merged_model, tokenizer, args.output)
 
-    # Delete SFT merged model from memory to free up space
-    print("Deleting SFT merged model from memory...")
-    del sft_merged_model, tokenizer, base_model, sft_lora_model
+    # # Delete SFT merged model from memory to free up space
+    # print("Deleting SFT merged model from memory...")
+    # del sft_merged_model, tokenizer, base_model, sft_lora_model
 
-    # Load Base + SFT LoRA model using Unsloth
-    print("Loading Base + SFT LoRA model using Unsloth...")
-    model, tokenizer = load_and_merge_grpo_lora_adapter(
-        sft_merged_model_path=args.output,
-        grpo_lora_adapter_path=args.grpo_lora_adapter,
+    # # Load Base + SFT LoRA model using Unsloth
+    # print("Loading Base + SFT LoRA model using Unsloth...")
+    # model, tokenizer = load_and_merge_grpo_lora_adapter(
+    #     sft_merged_model_path=args.output,
+    #     grpo_lora_adapter_path=args.grpo_lora_adapter,
+    #     max_seq_length=2048,
+    #     load_in_4bit=False
+    # )
+
+    # Load base model with Unsloth directly
+    model, tokenizer = FastLanguageModel.from_pretrained(
+        model_name=args.base_model,
         max_seq_length=2048,
-        load_in_4bit=False
+        dtype=None,
+        load_in_4bit=True,  # Use 4-bit to save memory
     )
+
+    # Load SFT LoRA adapter directly onto the Unsloth model
+    model = PeftModel.from_pretrained(model, args.sft_lora_adapter)
+
+    # Then load GRPO LoRA adapter
+    model = PeftModel.from_pretrained(model, args.grpo_lora_adapter)
+    model.eval()
 
     stop_sequence_ids = tokenizer.encode("</code>", add_special_tokens=False)
     stopping_criteria = StoppingCriteriaList([CustomStopCriteria(stop_sequence_ids)])

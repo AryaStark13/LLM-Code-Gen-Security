@@ -16,4 +16,5 @@ google-genai
 openai
 matplotlib
 seaborn
-# unsloth
+unsloth
+vllm
