@@ -66,23 +66,24 @@ def extract_function_info(task_file_content: str) -> Tuple[str, str, str]:
         docstring = docstring.replace(quote, '')
     docstring = docstring.strip()
     
-    # Extract safe implementation (after BEGIN SOLUTION)
-    safe_code = ""
-    begin_solution_idx = None
-    for i, line in enumerate(lines):
-        if 'BEGIN SOLUTION' in line:
-            begin_solution_idx = i
-            break
+    # # Extract safe implementation (after BEGIN SOLUTION)
+    # safe_code = ""
+    # begin_solution_idx = None
+    # for i, line in enumerate(lines):
+    #     if 'BEGIN SOLUTION' in line:
+    #         begin_solution_idx = i
+    #         break
     
-    if begin_solution_idx is not None:
-        safe_code = '\n'.join(lines[begin_solution_idx + 1:])
-        safe_code = safe_code.strip()
+    # if begin_solution_idx is not None:
+    #     safe_code = '\n'.join(lines[begin_solution_idx + 1:])
+    #     safe_code = safe_code.strip()
     
     # Combine function signature with docstring for task description
     # task_description = func_signature
     task_description = docstring
     
-    return func_signature, task_description, safe_code
+    # return func_signature, task_description, safe_code
+    return func_signature, task_description, task_file_content
 
 
 def extract_unsafe_implementations(test_file_content: str) -> List[str]:
@@ -242,7 +243,7 @@ def save_to_csv(entries: List[CWEvalEntry], output_file: str = "cweval_dataset.c
 def main():
     # Set the benchmark directory path
     # Adjust this path based on where you have the CWEval repository
-    benchmark_dir = "data/CWEval/CWEval-repo/benchmark/core/py"
+    benchmark_dir = "CWEval-repo/benchmark/core/py"
     
     if not os.path.exists(benchmark_dir):
         print(f"Error: Benchmark directory not found: {benchmark_dir}")
@@ -253,7 +254,7 @@ def main():
     entries = process_benchmark_directory(benchmark_dir)
     
     if entries:
-        save_to_csv(entries, "data/CWEval/data/cweval_dataset.csv")
+        save_to_csv(entries, "data/cweval_dataset-2.csv")
         
         # Print summary statistics
         print(f"\n{'='*60}")

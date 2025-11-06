@@ -35,7 +35,8 @@ def generate_structured_prompt(row: pd.Series) -> str:
     
     general_instructions = (
         "Think about the problem below carefully and step-by-step. "
-        "Then implement the code that meets the requirements described."
+        "Then implement the code that meets the requirements described. "
+        "Add imports if necessary."
     )
     
     func_signature = row['func_signature']
@@ -200,7 +201,7 @@ def convert_and_push_to_hf(csv_path: str,
     )
     
     # Select only required columns
-    required_columns = ['task_id', 'CWE_ID', 'y_negative', 'prompt', 'cot_steps', 'completion']
+    required_columns = ['task_id', 'id', 'CWE_ID', 'y_negative', 'prompt', 'cot_steps', 'completion']
     dataset = dataset.select_columns(required_columns)
     
     print(f"\nDataset features: {dataset.features}")
@@ -214,7 +215,8 @@ def convert_and_push_to_hf(csv_path: str,
         dataset.push_to_hub(
             hf_dataset_name,
             token=hf_token,
-            private=False  # Set to True if you want a private dataset
+            private=False,
+            commit_message="Fixed safe code implementations + added import reminder in prompt"
         )
         print(f"✓ Successfully pushed to https://huggingface.co/datasets/{hf_dataset_name}")
     else:
@@ -228,8 +230,8 @@ def convert_and_push_to_hf(csv_path: str,
 def main():
     # Paths
     input_csv = "data/CWEval/data/cweval_dataset.csv"
-    output_csv = "data/CWEval/data/cweval_dataset_with_cot.csv"
-    hf_dataset_name = "ShethArihant/CWEval-v1"  # Change this
+    output_csv = "data/CWEval/data/cweval_dataset_with_cot-2.csv"
+    hf_dataset_name = "ShethArihant/CWEval-v1"
     
     # Step 1: Generate CoT and save to CSV
     print("="*60)
