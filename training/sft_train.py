@@ -398,7 +398,7 @@ def main():
         print("Applying LoRA configuration...")
         print("="*50)
         
-        base_model = prepare_model_for_kbit_training(base_model)
+        # base_model = prepare_model_for_kbit_training(base_model)# base_model = prepare_model_for_kbit_training(base_model)
         
         peft_config = LoraConfig(
             r=lora_config['r'],

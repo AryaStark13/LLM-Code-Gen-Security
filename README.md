@@ -20,6 +20,24 @@ pip install --upgrade pip
 pip install -r requirements/requirements_linux.txt
 ```
 
+4. Copy and populate .env file: Only `HF_TOKEN` and `WANDB_API_KEY` are mandatory for training.
+```bash
+cp .env.example .env
+```
+
+# Dataset Format
+Each dataset should be pushed to HF Hub in the following format to be used for training/evaluation:
+
+```yaml
+task_id: "unique_task_identifier" # Global unique identifier for the task (Across datasets)
+id: "unique_example_identifier" # Unique identifier for the example (Within dataset)
+CWE_ID: 1234 # CWE ID associated with the example (-1 if not applicable)
+prompt: [{"role": "user", "content": "What color is the sky?"}] # Prompt
+completion: [{"role": "assistant", "content": "It is blue."}] # Expected completion
+y_negative: "<code> vulnerable_code_snippet </code>" # Negative code snippet (Optional for all datasets)
+cot_steps: "<think> step 1... step 2... </think>" # CoT steps (Optional for eval datasets)
+```
+
 # SeCodePLT Unit Test Instructions
 
 To execute the unit tests for a given `SecCodePLT_CoT_SFT_Results.json` file present in the `./results/CoT_SFT/<model-name>/` directory, follow these steps:
@@ -85,3 +103,14 @@ python cweval/evaluate.py pipeline \
 --eval_path $EVAL_PATH \
 --langs py
 ```
+
+# General Code Dataset Language Distribution: Before Filtering
+python      104,848
+javascript  9,194
+java        7,549
+cpp         4,496
+rust        2,226
+php         2,005
+c           1,374
+ruby        573
+go          507
