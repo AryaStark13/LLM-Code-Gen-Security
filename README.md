@@ -25,6 +25,12 @@ pip install -r requirements/requirements_linux.txt
 cp .env.example .env
 ```
 
+5. Run the SFT Training Script:
+```bash
+python -m training.sft_train \
+--config training/configs/sft-train-config.yaml
+```
+
 # Dataset Format
 Each dataset should be pushed to HF Hub in the following format to be used for training/evaluation:
 
