@@ -18,3 +18,5 @@ matplotlib
 seaborn
 unsloth
 vllm
+huggingface-hub
+PyYAML

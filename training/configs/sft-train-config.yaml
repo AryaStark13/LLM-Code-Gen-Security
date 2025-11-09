@@ -1,0 +1,84 @@
+# Example: Training on Multiple Datasets
+# Save this as sft-config-multi-dataset.yaml and run with:
+# cp sft-config-multi-dataset.yaml sft-config.yaml && python train_sft.py
+
+model:
+  name: "deepseek-ai/deepseek-coder-7b-instruct-v1.5"
+
+# Multiple datasets with different splits
+# All datasets must have the same features: prompt, cot_steps, completion, y_negative
+datasets:
+  - name: "ShethArihant/SeCodePLT-updated-CoT-v4"
+    train_split: "sft"
+    eval_split: "test"
+  
+  # Example: Add another dataset with standard train/test splits
+  # - name: "your-username/your-dataset"
+  #   train_split: "train"
+  #   eval_split: "test"
+  
+  # Example: Use percentage-based splits
+  # - name: "your-username/your-large-dataset"
+  #   train_split: "train[:90%]"
+  #   eval_split: "train[90%:]"
+  
+  # Example: Use a subset of a large dataset
+  # - name: "your-username/your-huge-dataset"
+  #   train_split: "train[:10000]"
+  #   eval_split: "validation[:1000]"
+
+lora:
+  enabled: true
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+training:
+  epochs: 3
+  learning_rate: 5.0e-5
+  batch_size: 2
+  eval_steps: 75
+  save_steps: 500
+  max_output_length: 2048
+  
+  # Loss configuration
+  ce_loss_weight: 1.0
+  triplet_loss_weight: 0.0
+  triplet_loss_margin: 1.0
+  
+  # Use last token representation instead of mean pooling
+  token_representation: "mean_pooled" # Options: "last_token", "mean_pooled"
+
+sft_config:
+  gradient_accumulation_steps: 4
+  gradient_checkpointing: true
+  max_grad_norm: 1.0
+  bf16: true
+  per_device_eval_batch_size: 1
+  eval_accumulation_steps: 1
+  dataloader_pin_memory: false
+  dataloader_num_workers: 2
+  
+  # Additional common SFTConfig parameters
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  logging_steps: 10
+  optim: "adamw_torch"
+  lr_scheduler_type: "cosine"
+
+wandb:
+  project: "llm-code-gen-security"
+  entity: "arihants-carnegie-mellon-university"
+
+hub:
+  push_to_hub: true
+  profile_name: "ShethArihant"
+  save_total_limit: 3

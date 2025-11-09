@@ -10,9 +10,6 @@ from tqdm import tqdm
 sys.path.append(os.path.abspath(".."))
 from utils.llms import OpenAI
 
-# DATASET = "ShethArihant/SeCodePLT-updated-CoT-v4"
-DATASET = "ShethArihant/CWEval-v1"
-
 
 def extract_code_from_response(response):
     """Extract code from the response if it's wrapped in tags."""
@@ -24,18 +21,16 @@ def extract_code_from_response(response):
             return code_match.group(1).strip()
     return response
 
-
-def process_dataset(model_name, output_file=None):
+def process_dataset(dataset, split, model_name, output_file=None):
     """Process the entire evaluation dataset with the specified model."""
     
     # Initialize the LLM client
     print(f"Initializing {model_name}...")
     llm_client = OpenAI(model_name=model_name)
-    # llm_client = Gemini(model_name=model_name)
     
     # Load the dataset
-    print(f"Loading dataset: {DATASET}")
-    eval_dataset = load_dataset(DATASET, split="python")
+    print(f"Loading dataset: {dataset}")
+    eval_dataset = load_dataset(dataset, split=split)
     
     total_examples = len(eval_dataset)
     print(f"Total examples to process: {total_examples}")
@@ -59,9 +54,6 @@ def process_dataset(model_name, output_file=None):
                 "id": example.get("id", idx),
                 "CWE_ID": example.get("CWE_ID", None),
                 "prompt": prompt,
-                # "ground_truth_cot": example.get("ground_truth_thinking", ""),
-                # "ground_truth_code": example.get("ground_truth_code", ""),
-                # "ground_truth_full": example.get("ground_truth_thinking", "") + example.get("ground_truth_code", ""),
                 "ground_truth_cot": example.get("cot_steps", ""),
                 "ground_truth_code": example.get("completion", "")[0]["content"],
                 "ground_truth_full": example.get("cot_steps", "") + example.get("completion", "")[0]["content"],
@@ -82,9 +74,6 @@ def process_dataset(model_name, output_file=None):
                 "task_id": example.get("task_id", ""),
                 "CWE_ID": example.get("CWE_ID", None),
                 "prompt": example.get("prompt", ""),
-                # "ground_truth_cot": example.get("ground_truth_thinking", ""),
-                # "ground_truth_code": example.get("ground_truth_code", ""),
-                # "ground_truth_full": example.get("ground_truth_thinking", "") + example.get("ground_truth_code", ""),
                 "ground_truth_cot": example.get("cot_steps", ""),
                 "ground_truth_code": example.get("completion", "")[0]["content"],
                 "ground_truth_full": example.get("cot_steps", "") + example.get("completion", "")[0]["content"],
@@ -101,14 +90,14 @@ def process_dataset(model_name, output_file=None):
         "total_examples": total_examples,
         "processed_examples": processed_count,
         "model_name": model_name,
-        "dataset": DATASET,
+        "dataset": dataset,
         "timestamp": datetime.now().isoformat(),
         "results": results
     }
     
     # Determine output filename
     if output_file is None:
-        output_file = f"evaluation_results_{model_name.replace('/', '_')}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        raise ValueError("Output file path must be provided.")
     
     # check if output directory exists, if not create it
     output_dir = os.path.dirname(output_file)
@@ -129,7 +118,19 @@ def process_dataset(model_name, output_file=None):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Evaluate a language model on the SeCodePLT dataset"
+        description="Evaluate a language model on a Dataset of our format."
+    )
+    parser.add_argument(
+        "--dataset",
+        type=str,
+        default="ShethArihant/CWEval-v1",
+        help="Name of the dataset to use (default: ShethArihant/CWEval-v1)"
+    )
+    parser.add_argument(
+        "--split",
+        type=str,
+        default="Python",
+        help="Dataset split to use (default: Python)"
     )
     parser.add_argument(
         "--model_name",
@@ -138,16 +139,18 @@ def main():
         help="Name of the model to use (e.g., 'gpt-4o-2024-08-06')"
     )
     parser.add_argument(
-        "-o", "--output",
+        "-o", "--output_file",
         type=str,
-        default="results/CWEval/LLMs/gpt-4o/CWEval_Results.json",
-        help="Output JSON file path (default: auto-generated filename)"
+        help="Output JSON file (with path) to save results. Should point to a file in the results/ directory."
     )
     
     args = parser.parse_args()
+
+    if args.output_file is None:
+        raise ValueError("Please provide an output file path using the -o or --output argument.")
     
     # Process the dataset
-    process_dataset(args.model_name, args.output)
+    process_dataset(args.dataset, args.split, args.model_name, args.output_file)
 
 
 if __name__ == "__main__":
