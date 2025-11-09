@@ -1,3 +1,25 @@
+# AWS EC2 Instance Setup Instructions
+
+1. Clone the repository:
+```bash
+git clone https://github.com/AryaStark13/LLM-Code-Gen-Security.git
+```
+Open the directory in VS Code:
+
+2. Setup Git User Config:
+```bash
+git config --global user.name "AryaStark13"
+git config --global user.email "arihant.sheth0802@gmail.com"
+```
+
+3. Setup Python Environment:
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements/requirements_linux.txt
+```
+
 # SeCodePLT Unit Test Instructions
 
 To execute the unit tests for a given `SecCodePLT_CoT_SFT_Results.json` file present in the `./results/CoT_SFT/<model-name>/` directory, follow these steps:
