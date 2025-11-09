@@ -312,7 +312,10 @@ def load_datasets(dataset_configs: List[Dict]) -> tuple:
     Load and concatenate multiple datasets.
     
     Args:
-        dataset_configs: List of dicts with 'name', 'train_split', 'eval_split'
+        dataset_configs: List of dicts with 'name', 'train_splits', 'eval_splits'
+        train_splits is a string or list of strings for training splits
+        eval_splits is a string or list of strings for evaluation splits (optional)
+        if eval_splits is not provided, that dataset is not used for evaluation.
     
     Returns:
         (train_dataset, eval_dataset)
@@ -322,22 +325,49 @@ def load_datasets(dataset_configs: List[Dict]) -> tuple:
     
     for config in dataset_configs:
         name = config['name']
-        train_split = config.get('train_split', 'train')
-        eval_split = config.get('eval_split', 'test')
+        train_splits = config['train_splits']
+        eval_splits = config.get('eval_splits', None)
         
         print(f"Loading dataset: {name}")
-        print(f"  Train split: {train_split}")
-        print(f"  Eval split: {eval_split}")
-        
-        train_ds = load_dataset(name, split=train_split)
-        eval_ds = load_dataset(name, split=eval_split)
-        
-        train_datasets.append(train_ds)
-        eval_datasets.append(eval_ds)
-    
+        print(f"- Train splits: {train_splits}")
+        if eval_splits:
+            print(f"- Eval splits: {eval_splits}")
+        else:
+            print("- No eval splits specified")
+
+        # Load and concatenate train splits
+        if isinstance(train_splits, str):
+            train_splits = [train_splits]
+
+        for train_split in train_splits:
+            train_ds = load_dataset(name, split=train_split)
+            train_datasets.append(train_ds)
+
+        # Load and concatenate eval splits
+        if eval_splits:
+            if isinstance(eval_splits, str):
+                eval_splits = [eval_splits]
+
+            for eval_split in eval_splits:
+                eval_ds = load_dataset(name, split=eval_split)
+                eval_datasets.append(eval_ds)
+
     # Concatenate all datasets
     train_dataset = concatenate_datasets(train_datasets) if len(train_datasets) > 1 else train_datasets[0]
     eval_dataset = concatenate_datasets(eval_datasets) if len(eval_datasets) > 1 else eval_datasets[0]
+
+    # Shuffle datasets
+    train_dataset = train_dataset.shuffle(seed=42)
+        
+    #     train_ds = load_dataset(name, split=train_split)
+    #     eval_ds = load_dataset(name, split=eval_split)
+        
+    #     train_datasets.append(train_ds)
+    #     eval_datasets.append(eval_ds)
+    
+    # # Concatenate all datasets
+    # train_dataset = concatenate_datasets(train_datasets) if len(train_datasets) > 1 else train_datasets[0]
+    # eval_dataset = concatenate_datasets(eval_datasets) if len(eval_datasets) > 1 else eval_datasets[0]
     
     print(f"\nTotal: {len(train_dataset)} train, {len(eval_dataset)} eval examples")
     

@@ -9,8 +9,22 @@ model:
 # All datasets must have the same features: prompt, cot_steps, completion, y_negative
 datasets:
   - name: "ShethArihant/SeCodePLT-updated-CoT-v4"
-    train_split: "sft"
-    eval_split: "test"
+    train_splits: 
+      - "sft"
+    eval_splits:
+      - "test"
+
+  - name: "ShethArihant/General-Code-v1"
+    train_splits:
+      - python
+      - javascript 
+      - c 
+      - cpp
+      - java 
+      - go 
+      - php 
+      - ruby 
+      - rust
   
   # Example: Add another dataset with standard train/test splits
   # - name: "your-username/your-dataset"
