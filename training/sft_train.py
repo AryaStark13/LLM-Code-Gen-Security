@@ -78,26 +78,74 @@ class TripletDataCollator(DataCollatorMixin):
     return_tensors: str = "pt"
 
     def torch_call(self, examples):
+        # batch = {}
+        
+        # # Extract components
+        # prompts = [
+        #     ex['prompt'][0]['content'] if isinstance(ex['prompt'], list) else ex['prompt'] 
+        #     for ex in examples
+        # ]
+        # # check that all prompts are not None
+        # for i, p in enumerate(prompts):
+        #     if p is None:
+        #         print(f"Example {i} has None prompt")
+        #         print(examples[i])
+        #         raise ValueError(f"Example {i} has None prompt")
+
+        # cot_steps = [ex['cot_steps'] for ex in examples]
+        # codes = [
+        #     ex['completion'][0]['content'] if isinstance(ex['completion'], list) else ex['completion'] 
+        #     for ex in examples
+        # ]
+        # negatives = [ex['y_negative'] for ex in examples]
+
         batch = {}
         
-        # Extract components
-        prompts = [
-            ex['prompt'][0]['content'] if isinstance(ex['prompt'], list) else ex['prompt'] 
-            for ex in examples
-        ]
-        # check that all prompts are not None
-        for i, p in enumerate(prompts):
+        # Extract components with detailed error checking
+        prompts = []
+        cot_steps = []
+        codes = []
+        negatives = []
+        
+        for i, ex in enumerate(examples):
+            # Extract prompt
+            if isinstance(ex['prompt'], list):
+                p = ex['prompt'][0]['content'] if ex['prompt'] else None
+            else:
+                p = ex['prompt']
+            
             if p is None:
-                print(f"Example {i} has None prompt")
-                print(examples[i])
+                print(f"ERROR: Example {i} has None prompt")
+                print(f"Full example: {ex}")
                 raise ValueError(f"Example {i} has None prompt")
-
-        cot_steps = [ex['cot_steps'] for ex in examples]
-        codes = [
-            ex['completion'][0]['content'] if isinstance(ex['completion'], list) else ex['completion'] 
-            for ex in examples
-        ]
-        negatives = [ex['y_negative'] for ex in examples]
+            prompts.append(p)
+            
+            # Extract cot_steps
+            cot = ex.get('cot_steps', '')
+            if cot is None:
+                print(f"WARNING: Example {i} has None cot_steps, using empty string")
+                print(f"Dataset: {ex.get('task_id', 'unknown')}")
+                cot = ''
+            cot_steps.append(cot)
+            
+            # Extract completion
+            if isinstance(ex['completion'], list):
+                code = ex['completion'][0]['content'] if ex['completion'] else None
+            else:
+                code = ex['completion']
+            
+            if code is None:
+                print(f"ERROR: Example {i} has None completion")
+                print(f"Full example: {ex}")
+                raise ValueError(f"Example {i} has None completion")
+            codes.append(code)
+            
+            # Extract negative
+            neg = ex.get('y_negative', '')
+            if neg is None:
+                print(f"WARNING: Example {i} has None y_negative, using empty string")
+                neg = ''
+            negatives.append(neg)
 
         # Tokenize full sequence (prompt + cot + code) for CE loss
         prompt_cot_code_texts = [
