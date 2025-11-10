@@ -59,7 +59,7 @@ cot_steps: "<think> step 1... step 2... </think>" # CoT steps (Optional for eval
 
 You can check if your dataset conforms to this schema by running:
 ```python
-from datasets import load_dataset, Value, List, DatasetDict
+from datasets import load_dataset, Value, List, DatasetDict, Features
 
 dataset = load_dataset("your-hf-dataset-identifier")
 
