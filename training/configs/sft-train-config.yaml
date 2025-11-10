@@ -1,12 +1,7 @@
-# Example: Training on Multiple Datasets
-# Save this as sft-config-multi-dataset.yaml and run with:
-# cp sft-config-multi-dataset.yaml sft-config.yaml && python train_sft.py
-
 model:
-  name: "deepseek-ai/deepseek-coder-7b-instruct-v1.5"
+  name: "deepseek-ai/deepseek-coder-7b-instruct-v1.5" # Pre-trained model name
 
 # Multiple datasets with different splits
-# All datasets must have the same features: prompt, cot_steps, completion, y_negative
 datasets:
   - name: "ShethArihant/SeCodePLT-updated-CoT-v4"
     train_splits: 
