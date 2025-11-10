@@ -88,6 +88,8 @@ class TripletDataCollator(DataCollatorMixin):
         # check that all prompts are not None
         for i, p in enumerate(prompts):
             if p is None:
+                print(f"Example {i} has None prompt")
+                print(examples[i])
                 raise ValueError(f"Example {i} has None prompt")
 
         cot_steps = [ex['cot_steps'] for ex in examples]
