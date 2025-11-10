@@ -85,6 +85,11 @@ class TripletDataCollator(DataCollatorMixin):
             ex['prompt'][0]['content'] if isinstance(ex['prompt'], list) else ex['prompt'] 
             for ex in examples
         ]
+        # check that all prompts are not None
+        for i, p in enumerate(prompts):
+            if p is None:
+                raise ValueError(f"Example {i} has None prompt")
+
         cot_steps = [ex['cot_steps'] for ex in examples]
         codes = [
             ex['completion'][0]['content'] if isinstance(ex['completion'], list) else ex['completion'] 
