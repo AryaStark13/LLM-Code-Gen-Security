@@ -57,6 +57,25 @@ cot_steps: "<think> step 1... step 2... </think>" # CoT steps (Optional for eval
 }
 ```
 
+You can check if your dataset conforms to this schema by running:
+```python
+from datasets import load_dataset, Value, List, DatasetDict
+
+dataset = load_dataset("your-hf-dataset-identifier")
+
+ref_features = Features({
+    'task_id': Value('string'),
+    'id': Value('string'),
+    'CWE_ID': Value('int64'),
+    'y_negative': Value('string'),
+    'prompt': List({'content': Value('string'), 'role': Value('string')}),
+    'cot_steps': Value('string'),
+    'completion': List({'content': Value('string'), 'role': Value('string')})
+})
+
+for split in dataset.keys():
+    assert dataset[split].features == ref_features
+```
 
 # SeCodePLT Unit Test Instructions
 
