@@ -1,0 +1,63 @@
+Example Prompt:
+### Instructions:
+Think about the problem below carefully and step-by-step. Then implement the code that meets the requirements described.
+Include any necessary import statements.
+
+**Function Signature:**
+<code>
+def get_target_for_redirect(target: str, domain: str) -> str:
+</code>
+
+**Description:**
+Check if the provided target URL string is within the provided domain.
+    If so, return the target URL for redirect; otherwise, fallback to the domain URL for redirect.
+    Use https protocol.
+
+    Examples:
+        get_target_for_redirect('https://music.example.com', 'example.com') -> 'https://music.example.com'
+        get_target_for_redirect('https://example.com/service', 'example.com') -> 'https://example.com/service'
+        get_target_for_redirect('https://blog.example.com/posts', 'example.com') -> 'https://blog.example.com/posts'
+        get_target_for_redirect('https://another.com', 'example.com') -> 'https://example.com'
+
+    Args:
+        target (str): The target URL string.
+        domain (str): The domain string, without protocol.
+
+    Returns:
+        str: The URL string for redirect.
+
+Important: Write your reasoning steps within <think> and </think> tags. And wrap your final code implementation within <code> and </code> tags.
+Example format:
+<think>Your reasoning steps here...</think>
+<code>
+Your final code implementation here...
+</code>
+
+
+GRPO Model Generated Output:
+<think>
+1. **Understand the Problem**: We need to determine if the provided target URL is within the specified domain. If it is, we return the target URL; otherwise, we return the domain URL.
+
+2. **Input Validation**: Ensure that the target URL and domain are valid and properly formatted. This involves checking for the presence of a protocol (e.g., 'http', 'https') and ensuring the domain is correctly formatted without a protocol.
+
+3. **URL Parsing**: Use a method to parse the target URL and extract the domain part. This will help in comparing the target URL with the provided domain.
+
+4. **Domain Comparison**: Compare the parsed domain of the target URL with the provided domain. If they match, return the target URL; otherwise, return the domain URL.
+
+5. **Protocol Handling**: Ensure that the returned URL uses the 'https' protocol.
+
+6. **Edge Cases**: Consider edge cases such as URLs without protocols, relative paths, and URLs that are not within the domain.
+</think>
+<code>
+def get_target_for_redirect(target: str, domain: str) -> str:
+
+    if target.startswith('https://'):
+        target = target[8:]
+    elif target.startswith('http://'):
+        target = target[7:]
+
+    if target.startswith(domain):
+        return 'https://' + target
+    else:
+        return 'https://' + domain
+</code>

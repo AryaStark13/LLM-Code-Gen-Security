@@ -1,0 +1,57 @@
+Example Prompt:
+### Instructions:
+Think about the problem below carefully and step-by-step. Then implement the code that meets the requirements described.
+Include any necessary import statements.
+
+**Function Signature:**
+<code>
+def get_target_for_redirect(target: str, domain: str) -> str:
+</code>
+
+**Description:**
+Check if the provided target URL string is within the provided domain.
+    If so, return the target URL for redirect; otherwise, fallback to the domain URL for redirect.
+    Use https protocol.
+
+    Examples:
+        get_target_for_redirect('https://music.example.com', 'example.com') -> 'https://music.example.com'
+        get_target_for_redirect('https://example.com/service', 'example.com') -> 'https://example.com/service'
+        get_target_for_redirect('https://blog.example.com/posts', 'example.com') -> 'https://blog.example.com/posts'
+        get_target_for_redirect('https://another.com', 'example.com') -> 'https://example.com'
+
+    Args:
+        target (str): The target URL string.
+        domain (str): The domain string, without protocol.
+
+    Returns:
+        str: The URL string for redirect.
+
+Important: Write your reasoning steps within <think> and </think> tags. And wrap your final code implementation within <code> and </code> tags.
+Example format:
+<think>Your reasoning steps here...</think>
+<code>
+Your final code implementation here...
+</code>
+
+
+SFT Merged Model Generated Output:
+<think>
+1. **Understand the Problem**: We need to determine if a given target URL is within a specified domain. If it is, we should return the target URL; otherwise, we should return the domain URL. The URLs should use the HTTPS protocol.
+
+2. **Extract Domain and Target**: We need to extract the domain and target from the provided URLs. The domain should be extracted without the protocol.
+
+3. **Check if Target is Within Domain**: To determine if the target is within the domain, we can check if the target URL starts with the domain URL. This can be done by comparing the target URL with the domain URL plus a slash.
+
+4. **Return Appropriate URL**: If the target is within the domain, return the target URL. Otherwise, return the domain URL with the HTTPS protocol.
+
+5. **Handle Edge Cases**: Consider edge cases such as when the target URL is the same as the domain URL, or when the target URL is a subdomain of the domain.
+
+6. **Implementation**: Implement the logic using string manipulation and conditional checks to determine the appropriate URL for redirection.
+</think>
+<code>
+def get_target_for_redirect(target: str, domain: str) -> str:
+    if target.startswith(f"{domain}/"):
+        return target
+    else:
+        return f"https://{domain}"
+</code>
