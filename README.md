@@ -44,6 +44,20 @@ y_negative: "<code> vulnerable_code_snippet </code>" # Negative code snippet (Op
 cot_steps: "<think> step 1... step 2... </think>" # CoT steps (Optional for eval datasets)
 ```
 
+## HF Dataset Schema
+```python
+{
+    'task_id': Value('string'),
+    'id': Value('string'),
+    'CWE_ID': Value('int64'),
+    'y_negative': Value('string'),
+    'prompt': List({'content': Value('string'), 'role': Value('string')}),
+    'cot_steps': Value('string'),
+    'completion': List({'content': Value('string'), 'role': Value('string')})
+}
+```
+
+
 # SeCodePLT Unit Test Instructions
 
 To execute the unit tests for a given `SecCodePLT_CoT_SFT_Results.json` file present in the `./results/CoT_SFT/<model-name>/` directory, follow these steps:
