@@ -73,7 +73,7 @@ lora:
     - "down_proj"
 
 training:
-  epochs: 3
+  epochs: 2
   learning_rate: 5.0e-5
   batch_size: 2
   eval_steps: 75
