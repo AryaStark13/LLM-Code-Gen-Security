@@ -77,6 +77,15 @@ for split in dataset.keys():
     assert dataset[split].features == ref_features
 ```
 
+# Run Inference
+
+## SeCodePLT
+```python
+python -m inference.inference_sft \
+--dataset ShethArihant/CWEval-v1 \
+--split python
+```
+
 # SeCodePLT Unit Test Instructions
 
 To execute the unit tests for a given `SecCodePLT_CoT_SFT_Results.json` file present in the `./results/CoT_SFT/<model-name>/` directory, follow these steps:

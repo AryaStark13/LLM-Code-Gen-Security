@@ -144,7 +144,7 @@ def main():
     parser.add_argument("--run_eval", action="store_true", help="Run evaluation on the full dataset")
     parser.add_argument("--eval_output", type=str, default="CWEval_Results.json", help="Output file for evaluation results")
     
-    parser.add_argument("--sft_lora_adapter", type=str, default="ShethArihant/deepseek-coder-7b-instruct-v1.5_sft-v4-with-setup_3-epochs_ce-0.8_triplet-0.2_lora")
+    parser.add_argument("--sft_lora_adapter", type=str, default="ShethArihant/deepseek-coder-7b-instruct-v1.5_sft_2-epochs")
     parser.add_argument("--output", type=str, default="models/base-sft-merged", help="Output path for SFT merged model")
     parser.add_argument("--grpo_lora_adapter", type=str, default="lindafei001/deepseek-7b-grpo-20epochs")
     args = parser.parse_args()
