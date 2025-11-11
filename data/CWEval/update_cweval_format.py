@@ -1,10 +1,21 @@
 import os
 import json
-from datasets import load_dataset, DatasetDict
+from datasets import load_dataset, DatasetDict, Dataset, Features, Value, List
 from dotenv import load_dotenv
 import argparse
 
 load_dotenv()
+
+# Define the reference schema that all datasets should match
+REF_FEATURES = Features({
+    'task_id': Value('string'),
+    'id': Value('string'),
+    'CWE_ID': Value('int64'),
+    'y_negative': Value('string'),
+    'prompt': List({'content': Value('string'), 'role': Value('string')}),
+    'cot_steps': Value('string'),
+    'completion': List({'content': Value('string'), 'role': Value('string')})
+})
 
 # Language to code block mapping
 LANG_TO_CODE_BLOCK = {
@@ -92,20 +103,20 @@ def process_example(example, lang):
     # Update completion
     updated_completion = update_completion(example['completion'])
     
-    # Return updated example
+    # Return updated example with correct types
     return {
-        'task_id': example['task_id'],
-        'id': example['id'],
-        'CWE_ID': example['CWE_ID'],
+        'task_id': str(example['task_id']),
+        'id': str(example['id']),
+        'CWE_ID': int(example['CWE_ID']),
         'prompt': updated_prompt,
         'completion': updated_completion,
-        'y_negative': example['y_negative'],
-        'cot_steps': example['cot_steps']
+        'y_negative': str(example['y_negative']),
+        'cot_steps': str(example['cot_steps'])
     }
 
 def main():
     parser = argparse.ArgumentParser(description='Update CWEval dataset format from markdown to XML tags')
-    parser.add_argument('--dataset', type=str, default='ShethArihant/CWEval-v1',
+    parser.add_argument('--dataset', type=str, default='ShethArihant/CWEval-CoT',
                        help='HuggingFace dataset name')
     parser.add_argument('--output_dataset', type=str, default=None,
                        help='Output HuggingFace dataset name (default: same as input)')
@@ -174,9 +185,22 @@ def main():
         print("Updating prompts and completions...")
         updated_examples = [process_example(example, lang) for example in split_data]
         
-        # Create new dataset from updated examples
-        from datasets import Dataset
-        updated_split = Dataset.from_list(updated_examples)
+        # Create new dataset from updated examples with schema validation
+        print("Creating dataset with schema validation...")
+        updated_split = Dataset.from_list(updated_examples, features=REF_FEATURES)
+        
+        # Validate features match reference
+        print("\nSchema Validation:")
+        print(f"  Expected features: {REF_FEATURES}")
+        print(f"  Actual features: {updated_split.features}")
+        
+        if updated_split.features != REF_FEATURES:
+            print(f"  ✗ WARNING: Features mismatch!")
+            print(f"    Expected: {REF_FEATURES}")
+            print(f"    Actual: {updated_split.features}")
+            raise ValueError(f"Schema validation failed for split {split_name}")
+        else:
+            print(f"  ✓ Schema validation passed!")
         
         # Verify the update
         print("\nVerification:")
@@ -206,6 +230,28 @@ def main():
     
     print(f"Final dataset splits: {list(final_dataset.keys())}")
     print(f"Removed splits: {splits_to_remove}")
+    
+    # Final schema validation for all splits
+    print(f"\n{'='*60}")
+    print("Final Schema Validation")
+    print(f"{'='*60}")
+    
+    all_valid = True
+    for split_name, split_data in final_dataset.items():
+        print(f"\nValidating {split_name}:")
+        print(f"  Examples: {len(split_data)}")
+        print(f"  Features: {split_data.features}")
+        
+        if split_data.features != REF_FEATURES:
+            print(f"  ✗ Schema mismatch!")
+            all_valid = False
+        else:
+            print(f"  ✓ Schema valid!")
+    
+    if not all_valid:
+        raise ValueError("Schema validation failed for one or more splits. Aborting.")
+    
+    print(f"\n✓ All splits passed schema validation!")
     
     # Save locally if requested
     if args.save_local:
