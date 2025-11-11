@@ -34,6 +34,15 @@ python -m inference.inference_sft \
 --eval_output "results/CoT_SFT/deepseek-coder-7b/CoT-SFT_3-datasets/SecCodePLT_CoT_SFT_Results.json"
 ```
 
+OR
+```bash
+python -m inference.inference_sft \
+--dataset ShethArihant/CWEval-v1 \
+--splits core_c core_cpp core_go core_js core_py lang_c  \
+--run_eval \
+--eval_output "results/CWEval/deepseek-coder-7b/CoT-SFT_3-datasets/CWEval_Results.json"
+```
+
 # AWS EC2 Instance Setup Instructions
 
 1. Clone the repository:
