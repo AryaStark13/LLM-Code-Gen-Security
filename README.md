@@ -50,7 +50,7 @@ git config --global user.email "arihant.sheth0802@gmail.com"
 
 3. Setup Python Environment:
 ```bash
-python3 -m venv .venv
+python -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements/requirements_linux.txt
@@ -148,7 +148,7 @@ Replace `<model-name>` with the actual name of the model whose results you want 
 # Navigate to the root directory of the project
 # the parent directory should point to the model results folder present in ./results/CWEval/*
 # this should contain a file named CWEval_Results.json
-python3 -m scripts.convert_cweval_json_to_eval \
+python -m scripts.convert_cweval_json_to_eval \
 --parent deepseek-coder-7b/CoT-SFT_RLVR-2
 ```
 
@@ -161,17 +161,17 @@ export EVAL_PATH=evals/eval_deepseek-coder-1b__<variant>
 export EVAL_PATH=evals/eval_LLMs__<variant>
 
 # Copy the task & test py files into the same folder as the generated outputs
-python3 -m cweval.evaluate parse_generated \
+python -m cweval.evaluate parse_generated \
 --eval_path $EVAL_PATH
 
 # Run Tests for python only
 # eval_path is created in step 1 in the following format: evals/eval_<parent>__<model-name>
 # run_tests will execute tests for only the language present
-python3 -m cweval.evaluate run_tests \
+python -m cweval.evaluate run_tests \
 --eval_path $EVAL_PATH
 
 # Now execute merge results
-python3 -m cweval.evaluate \
+python -m cweval.evaluate \
 _merge_results \
 --eval_path $EVAL_PATH
 

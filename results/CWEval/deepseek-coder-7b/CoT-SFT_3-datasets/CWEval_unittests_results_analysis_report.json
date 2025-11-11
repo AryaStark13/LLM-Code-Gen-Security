@@ -1,0 +1,54 @@
+{
+  "summary": {
+    "total_entries": 19,
+    "error_cases": 0,
+    "evaluated_cases": 19,
+    "evaluation_rate": 100.0
+  },
+  "test_statistics": {
+    "total_tests_run": 80,
+    "total_tests_passed": 56,
+    "total_tests_failed": 24,
+    "overall_success_rate": 70.0,
+    "task_keys_with_0_tests_run": []
+  },
+  "success_breakdown": {
+    "all_passed": {
+      "count": 8,
+      "percentage": 42.10526315789473,
+      "task_keys": [
+        "cwe_326_0_py",
+        "cwe_327_0_py",
+        "cwe_347_0_py",
+        "cwe_377_0_py",
+        "cwe_400_0_py",
+        "cwe_502_0_py",
+        "cwe_732_2_py",
+        "cwe_943_0_py"
+      ]
+    },
+    "partial_passed": {
+      "count": 9,
+      "percentage": 47.368421052631575,
+      "task_keys": [
+        "cwe_020_0_py",
+        "cwe_022_0_py",
+        "cwe_022_2_py",
+        "cwe_079_0_py",
+        "cwe_095_0_py",
+        "cwe_1333_0_py",
+        "cwe_327_1_py",
+        "cwe_918_0_py",
+        "cwe_918_1_py"
+      ]
+    },
+    "all_failed": {
+      "count": 2,
+      "percentage": 10.526315789473683,
+      "task_keys": [
+        "cwe_078_0_py",
+        "cwe_117_0_py"
+      ]
+    }
+  }
+}
