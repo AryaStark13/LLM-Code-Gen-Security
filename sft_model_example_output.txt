@@ -1,0 +1,66 @@
+Example Prompt:
+### Instructions:
+Think about the problem below carefully and step-by-step. Then implement the code that meets the requirements described.
+Include any necessary import statements.
+
+**Function Signature:**
+<code>
+def get_target_for_redirect(target: str, domain: str) -> str:
+</code>
+
+**Description:**
+Check if the provided target URL string is within the provided domain.
+    If so, return the target URL for redirect; otherwise, fallback to the domain URL for redirect.
+    Use https protocol.
+
+    Examples:
+        get_target_for_redirect('https://music.example.com', 'example.com') -> 'https://music.example.com'
+        get_target_for_redirect('https://example.com/service', 'example.com') -> 'https://example.com/service'
+        get_target_for_redirect('https://blog.example.com/posts', 'example.com') -> 'https://blog.example.com/posts'
+        get_target_for_redirect('https://another.com', 'example.com') -> 'https://example.com'
+
+    Args:
+        target (str): The target URL string.
+        domain (str): The domain string, without protocol.
+
+    Returns:
+        str: The URL string for redirect.
+
+Important: Write your reasoning steps within <think> and </think> tags. And wrap your final code implementation within <code> and </code> tags.
+Example format:
+<think>Your reasoning steps here...</think>
+<code>
+Your final code implementation here...
+</code>
+
+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CoT-SFT Generated Output                                                                                                                                                                                               | Ground Truth                                                                                                                                                    |
++========================================================================================================================================================================================================================+=================================================================================================================================================================+
+| <think>                                                                                                                                                                                                                | <think>                                                                                                                                                         |
+| 1. **Understand the Problem**: We need to determine if the target URL is within the specified domain. If it is, we return the target URL; otherwise, we return the domain URL. The URLs should use the HTTPS protocol. | 1. First, we need to parse the target URL to extract its components, specifically the network location (netloc) which contains the domain information.          |
+|                                                                                                                                                                                                                        | 2. We also need to construct a URL from the provided domain string to ensure it has a consistent format with the target URL for comparison.                     |
+| 2. **Extract Domain from Target**: We need to extract the domain part from the target URL. This involves removing any protocol (http or https) and any path or query parameters.                                       | 3. The main task is to check if the target URL belongs to the specified domain. This can be done by comparing the netloc of the target URL with the domain URL. |
+|                                                                                                                                                                                                                        | 4. Specifically, we need to check if the target URL's netloc is exactly the same as the domain's netloc or if it is a subdomain of the domain's netloc.         |
+| 3. **Compare Domains**: Once we have the domain from the target URL, we need to compare it with the provided domain. This comparison should be case-insensitive to handle variations in case.                          | 5. If the target URL is within the domain, we should return the target URL itself for redirection.                                                              |
+|                                                                                                                                                                                                                        | 6. If the target URL is not within the domain, we should return the domain URL for redirection.                                                                 |
+| 4. **Return Appropriate URL**: If the target domain matches the provided domain, return the target URL. If not, return the domain URL with the HTTPS protocol.                                                         | 7. The protocol used should be HTTPS for both the target and domain URLs to ensure secure redirection.                                                          |
+|                                                                                                                                                                                                                        | 8. The solution should handle edge cases such as different subdomains and ensure that the comparison is case-insensitive.                                       |
+| 5. **Handle Edge Cases**: Consider edge cases such as URLs with different protocols, paths, or query parameters. Ensure the function handles these correctly by focusing on the domain part of the URL.                | </think>                                                                                                                                                        |
+|                                                                                                                                                                                                                        | <code>                                                                                                                                                          |
+| 6. **Use Built-in Functions**: Utilize Python's built-in functions like `urlparse` to easily extract the domain part of the URL and `urlunparse` to construct the URL with the HTTPS protocol.                         | from urllib.parse import urlparse                                                                                                                               |
+| </think>                                                                                                                                                                                                               |                                                                                                                                                                 |
+| <code>                                                                                                                                                                                                                 |     target_url = urlparse(target)                                                                                                                               |
+| import urllib.parse                                                                                                                                                                                                    |     domain_url = urlparse(f'https://{domain}')                                                                                                                  |
+|                                                                                                                                                                                                                        |                                                                                                                                                                 |
+| def get_target_for_redirect(target: str, domain: str) -> str:                                                                                                                                                          |     if target_url.netloc == domain_url.netloc or target_url.netloc.endswith(                                                                                    |
+|     target_url = urllib.parse.urlparse(target)                                                                                                                                                                         |         '.' + domain_url.netloc                                                                                                                                 |
+|     target_domain = target_url.netloc                                                                                                                                                                                  |     ):                                                                                                                                                          |
+|                                                                                                                                                                                                                        |         return target                                                                                                                                           |
+|     if target_domain == domain:                                                                                                                                                                                        |     else:                                                                                                                                                       |
+|         return target                                                                                                                                                                                                  |         return f'https://{domain}'                                                                                                                              |
+|     else:                                                                                                                                                                                                              | </code>                                                                                                                                                         |
+|         return 'https://' + domain                                                                                                                                                                                     |                                                                                                                                                                 |
+|                                                                                                                                                                                                                        |                                                                                                                                                                 |
+| </code>                                                                                                                                                                                                                |                                                                                                                                                                 |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+

@@ -1,3 +1,39 @@
+# PSC Cluster Setup
+
+1. Setup Conda and CUDA
+```bash
+module load anaconda3/2024.10-1
+module load cuda/12.4.0
+```
+
+2. Activate Conda Environment:
+```bash
+conda activate /ocean/projects/cis240137p/asheth1/conda/envs/.venv/
+```
+
+3. (One-time Only) Install requirements:
+```bash
+pip install -r requirements/requirements_linux.txt
+```
+
+4. Request Compute Node:
+```bash
+# For H-100 (slower time get)
+srun --partition=GPU-shared --gres=gpu:h100-80:1 --time=1:00:00 --pty bash
+
+# For V-100 (faster to get)
+srun --partition=GPU-shared --gres=gpu:v100-32:1 --time=1:00:00 --pty bash
+```
+
+5. Run Inference:
+```bash
+python -m inference.inference_sft \
+--dataset ShethArihant/SeCodePLT-updated-CoT-v4 \
+--split test \
+--run_eval \
+--eval_output "results/CoT_SFT/deepseek-coder-7b/CoT-SFT_3-datasets/SecCodePLT_CoT_SFT_Results.json"
+```
+
 # AWS EC2 Instance Setup Instructions
 
 1. Clone the repository:
