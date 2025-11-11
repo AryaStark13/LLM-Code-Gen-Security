@@ -38,10 +38,12 @@ OR
 ```bash
 python -m inference.inference_sft \
 --dataset ShethArihant/CWEval-v1 \
---splits core_c core_cpp core_go core_js core_py lang_c  \
---run_eval \
+--splits core_c \
 --eval_output "results/CWEval/deepseek-coder-7b/CoT-SFT_3-datasets/CWEval_Results.json"
 ```
+python -m inference.inference_sft_batched \
+--dataset ShethArihant/CWEval-v1 \
+--splits core_c
 
 # AWS EC2 Instance Setup Instructions
 

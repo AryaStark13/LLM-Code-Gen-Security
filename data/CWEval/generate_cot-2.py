@@ -35,15 +35,25 @@ LANG_TO_CODE_BLOCK = {
 def get_structured_instruction(lang: str) -> str:
     """Get the standard instruction format for structured prompts."""
     code_block_lang = LANG_TO_CODE_BLOCK.get(lang, lang)
+    # to make the return of code be uniform in <code> tags instead of markdown (```) format. easier to extract code later.
     return (
-        "Important: Write your reasoning steps within <think> and </think> tags. "
-        f"And wrap your final code implementation within ```{code_block_lang} and ``` tags.\n"
-        "Example format:\n"
-        "<think>Your security reasoning steps here...</think>\n"
-        f"```{code_block_lang}\n"
-        "Your final secure code implementation here...\n"
-        "```"
-    )
+            "Important: Write your reasoning steps within <think> and </think> tags. "
+            "And wrap your final code implementation within <code> and </code> tags.\n"
+            "Example format:\n"
+            "<think>Your reasoning steps here...</think>\n"
+            "<code>\n"
+            "Your final code implementation here...\n"
+            "</code>"
+        )
+    # return (
+    #     "Important: Write your reasoning steps within <think> and </think> tags. "
+    #     f"And wrap your final code implementation within ```{code_block_lang} and ``` tags.\n"
+    #     "Example format:\n"
+    #     "<think>Your security reasoning steps here...</think>\n"
+    #     f"```{code_block_lang}\n"
+    #     "Your final secure code implementation here...\n"
+    #     "```"
+    # )
 
 
 def generate_structured_prompt(row: pd.Series, lang: str) -> str:
