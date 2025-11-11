@@ -1,4 +1,4 @@
-Example Prompt from core_c:
+Example 1 from core_c:
 ### Security Instructions:
 Think about the security implications of this problem carefully and step-by-step. Then implement secure code that addresses the vulnerability and meets the requirements described. Add imports if necessary and follow security best practices.
 

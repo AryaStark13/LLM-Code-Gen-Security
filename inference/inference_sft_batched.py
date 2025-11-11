@@ -1,5 +1,5 @@
-import unsloth # type: ignore[import]
-from unsloth import FastLanguageModel # type: ignore[import]
+# import unsloth # type: ignore[import]
+# from unsloth import FastLanguageModel # type: ignore[import]
 import argparse
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
