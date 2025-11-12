@@ -61,7 +61,7 @@ git config --global user.email "arihant.sheth0802@gmail.com"
 
 3. Setup Python Environment:
 ```bash
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements/requirements_linux.txt
@@ -75,7 +75,10 @@ cp .env.example .env
 5. Run the SFT Training Script:
 ```bash
 python -m training.sft_train \
---config training/configs/sft-train-config.yaml
+--config training/configs/codegemma-config.yaml
+
+python -m training.sft_train \
+--config training/configs/codegemma-config.yaml 2>&1 | tee codegemma_training_$(date +%Y%m%d_%H%M%S).log
 ```
 
 # Dataset Format
