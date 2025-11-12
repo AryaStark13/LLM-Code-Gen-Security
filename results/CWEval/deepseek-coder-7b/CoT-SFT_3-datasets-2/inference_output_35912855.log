@@ -1,0 +1,77 @@
+Tue Nov 11 18:57:29 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 560.35.03              Driver Version: 560.35.03      CUDA Version: 12.6     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla V100-SXM2-32GB           On  |   00000000:8A:00.0 Off |                    0 |
+| N/A   31C    P0             41W /  300W |       1MiB /  32768MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Loading base model and tokenizer...
+Loading SFT LoRA adapter...
+Merging SFT LoRA adapter...
+Model is ready for inference with SFT LoRA adapter.
+Total parameters in the model: 6,910,365,696
+Batch size: 4
+Max new tokens: 2048
+
+============================================================
+Processing split: core_c
+============================================================
+Dataset size: 20 examples
+Processing in batches of 4...
+Completed core_c: 20 examples
+
+============================================================
+Processing split: core_cpp
+============================================================
+Dataset size: 21 examples
+Processing in batches of 4...
+Completed core_cpp: 21 examples
+
+============================================================
+Processing split: core_go
+============================================================
+Dataset size: 19 examples
+Processing in batches of 4...
+Completed core_go: 19 examples
+
+============================================================
+Processing split: core_js
+============================================================
+Dataset size: 23 examples
+Processing in batches of 4...
+Completed core_js: 23 examples
+
+============================================================
+Processing split: core_py
+============================================================
+Dataset size: 25 examples
+Processing in batches of 4...
+Completed core_py: 25 examples
+
+============================================================
+Processing split: lang_c
+============================================================
+Dataset size: 11 examples
+Processing in batches of 4...
+Completed lang_c: 11 examples
+
+============================================================
+Evaluation Complete!
+============================================================
+Total splits processed: 6
+Total examples: 119
+Batch size used: 4
+Results saved to: results/CWEval/deepseek-coder-7b/CoT-SFT_3-datasets-2/CWEval_Results.json
