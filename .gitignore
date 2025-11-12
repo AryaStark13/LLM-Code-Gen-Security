@@ -8,3 +8,4 @@ plots-og/
 models/*
 unsloth_compiled_cache/
 wandb/
+*.log

@@ -1,149 +1,0 @@
-Skipping import of cpp extensions due to incompatible torch version 2.8.0+cu128 for torchao version 0.14.1             Please see https://github.com/pytorch/ao/issues/2919 for more info
-Note: Environment variable`HF_TOKEN` is set and is the current active token independently from the token you've just configured.
-wandb: No netrc file found, creating one.
-wandb: Appending key for api.wandb.ai to your netrc file: /jet/home/asheth1/.netrc
-wandb: Currently logged in as: arihants (arihants-carnegie-mellon-university) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
-Generating python split:   0%|          | 0/500 [00:00<?, ? examples/s]Generating python split: 100%|██████████| 500/500 [00:00<00:00, 527.65 examples/s]Generating python split: 100%|██████████| 500/500 [00:00<00:00, 514.38 examples/s]
-Generating javascript split:   0%|          | 0/500 [00:00<?, ? examples/s]Generating javascript split: 100%|██████████| 500/500 [00:00<00:00, 73414.27 examples/s]
-Generating c split:   0%|          | 0/500 [00:00<?, ? examples/s]Generating c split: 100%|██████████| 500/500 [00:00<00:00, 68899.14 examples/s]
-Generating cpp split:   0%|          | 0/500 [00:00<?, ? examples/s]Generating cpp split: 100%|██████████| 500/500 [00:00<00:00, 71916.33 examples/s]
-Generating java split:   0%|          | 0/500 [00:00<?, ? examples/s]Generating java split: 100%|██████████| 500/500 [00:00<00:00, 69979.71 examples/s]
-Generating go split:   0%|          | 0/415 [00:00<?, ? examples/s]Generating go split: 100%|██████████| 415/415 [00:00<00:00, 61450.12 examples/s]
-Generating php split:   0%|          | 0/500 [00:00<?, ? examples/s]Generating php split: 100%|██████████| 500/500 [00:00<00:00, 77879.98 examples/s]
-Generating ruby split:   0%|          | 0/500 [00:00<?, ? examples/s]Generating ruby split: 100%|██████████| 500/500 [00:00<00:00, 83210.41 examples/s]
-Generating rust split:   0%|          | 0/500 [00:00<?, ? examples/s]Generating rust split: 100%|██████████| 500/500 [00:00<00:00, 64732.91 examples/s]
-Generating python_train split:   0%|          | 0/381 [00:00<?, ? examples/s]Generating python_train split: 100%|██████████| 381/381 [00:00<00:00, 54478.91 examples/s]
-Generating python_test split:   0%|          | 0/43 [00:00<?, ? examples/s]Generating python_test split: 100%|██████████| 43/43 [00:00<00:00, 12366.64 examples/s]
-Generating java_train split:   0%|          | 0/380 [00:00<?, ? examples/s]Generating java_train split: 100%|██████████| 380/380 [00:00<00:00, 63932.43 examples/s]
-Generating java_test split:   0%|          | 0/43 [00:00<?, ? examples/s]Generating java_test split: 100%|██████████| 43/43 [00:00<00:00, 12310.93 examples/s]
-Generating javascript_train split:   0%|          | 0/381 [00:00<?, ? examples/s]Generating javascript_train split: 100%|██████████| 381/381 [00:00<00:00, 73757.49 examples/s]
-Generating javascript_test split:   0%|          | 0/43 [00:00<?, ? examples/s]Generating javascript_test split: 100%|██████████| 43/43 [00:00<00:00, 12436.57 examples/s]
-Generating php_train split:   0%|          | 0/380 [00:00<?, ? examples/s]Generating php_train split: 100%|██████████| 380/380 [00:00<00:00, 77672.30 examples/s]
-Generating php_test split:   0%|          | 0/43 [00:00<?, ? examples/s]Generating php_test split: 100%|██████████| 43/43 [00:00<00:00, 13224.45 examples/s]
-Generating ruby_train split:   0%|          | 0/378 [00:00<?, ? examples/s]Generating ruby_train split: 100%|██████████| 378/378 [00:00<00:00, 84220.29 examples/s]
-Generating ruby_test split:   0%|          | 0/42 [00:00<?, ? examples/s]Generating ruby_test split: 100%|██████████| 42/42 [00:00<00:00, 12573.03 examples/s]
-Generating go_train split:   0%|          | 0/380 [00:00<?, ? examples/s]Generating go_train split: 100%|██████████| 380/380 [00:00<00:00, 82878.45 examples/s]
-Generating go_test split:   0%|          | 0/43 [00:00<?, ? examples/s]Generating go_test split: 100%|██████████| 43/43 [00:00<00:00, 12753.15 examples/s]
-`torch_dtype` is deprecated! Use `dtype` instead!
-Fetching 4 files:   0%|          | 0/4 [00:00<?, ?it/s]Fetching 4 files:   0%|          | 0/4 [00:06<?, ?it/s]
-Traceback (most recent call last):
-  File "/ocean/projects/cis240137p/asheth1/LLM-Code-Gen-Security/training/sft_train.py", line 584, in <module>
-    main()
-  File "/ocean/projects/cis240137p/asheth1/LLM-Code-Gen-Security/training/sft_train.py", line 458, in main
-    base_model = AutoModelForCausalLM.from_pretrained(
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 604, in from_pretrained
-    return model_class.from_pretrained(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/transformers/modeling_utils.py", line 277, in _wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4900, in from_pretrained
-    checkpoint_files, sharded_metadata = _get_resolved_checkpoint_files(
-                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/transformers/modeling_utils.py", line 1200, in _get_resolved_checkpoint_files
-    checkpoint_files, sharded_metadata = get_checkpoint_shard_files(
-                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/transformers/utils/hub.py", line 1084, in get_checkpoint_shard_files
-    cached_filenames = cached_files(
-                       ^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/transformers/utils/hub.py", line 567, in cached_files
-    raise e
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/transformers/utils/hub.py", line 494, in cached_files
-    snapshot_download(
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
-    return fn(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/_snapshot_download.py", line 332, in snapshot_download
-    thread_map(
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/tqdm/contrib/concurrent.py", line 69, in thread_map
-    return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map
-    return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/tqdm/std.py", line 1181, in __iter__
-    for obj in iterable:
-               ^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
-    yield _result_or_cancel(fs.pop())
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
-    return fut.result(timeout)
-           ^^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/concurrent/futures/_base.py", line 456, in result
-    return self.__get_result()
-           ^^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
-    raise self._exception
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/concurrent/futures/thread.py", line 59, in run
-    result = self.fn(*self.args, **self.kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/_snapshot_download.py", line 306, in _inner_hf_hub_download
-    return hf_hub_download(
-           ^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
-    return fn(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1007, in hf_hub_download
-    return _hf_hub_download_to_cache_dir(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1168, in _hf_hub_download_to_cache_dir
-    _download_to_tmp_and_move(
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1720, in _download_to_tmp_and_move
-    xet_get(
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 626, in xet_get
-    download_files(
-RuntimeError: Data processing error: CAS service error : IO Error: Disk quota exceeded (os error 122)
-Skipping import of cpp extensions due to incompatible torch version 2.8.0+cu128 for torchao version 0.14.1             Please see https://github.com/pytorch/ao/issues/2919 for more info
-OSError: [Errno 122] Disk quota exceeded
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/ocean/projects/cis240137p/asheth1/LLM-Code-Gen-Security/training/sft_train.py", line 584, in <module>
-    main()
-  File "/ocean/projects/cis240137p/asheth1/LLM-Code-Gen-Security/training/sft_train.py", line 440, in main
-    login(token=hf_token)
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_deprecation.py", line 101, in inner_f
-    return f(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_deprecation.py", line 31, in inner_f
-    return f(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/_login.py", line 120, in login
-    _login(token, add_to_git_credential=add_to_git_credential)
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/_login.py", line 404, in _login
-    _save_token(token=token, token_name=token_name)
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_auth.py", line 203, in _save_token
-    _save_stored_tokens(stored_tokens)
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_auth.py", line 167, in _save_stored_tokens
-    with stored_tokens_path.open("w") as config_file:
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-OSError: [Errno 122] Disk quota exceeded
-Skipping import of cpp extensions due to incompatible torch version 2.8.0+cu128 for torchao version 0.14.1             Please see https://github.com/pytorch/ao/issues/2919 for more info
-OSError: [Errno 122] Disk quota exceeded
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/ocean/projects/cis240137p/asheth1/LLM-Code-Gen-Security/training/sft_train.py", line 584, in <module>
-    main()
-  File "/ocean/projects/cis240137p/asheth1/LLM-Code-Gen-Security/training/sft_train.py", line 440, in main
-    login(token=hf_token)
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_deprecation.py", line 101, in inner_f
-    return f(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_deprecation.py", line 31, in inner_f
-    return f(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/_login.py", line 120, in login
-    _login(token, add_to_git_credential=add_to_git_credential)
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/_login.py", line 404, in _login
-    _save_token(token=token, token_name=token_name)
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_auth.py", line 203, in _save_token
-    _save_stored_tokens(stored_tokens)
-  File "/ocean/projects/cis240137p/asheth1/conda/envs/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_auth.py", line 167, in _save_stored_tokens
-    with stored_tokens_path.open("w") as config_file:
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-OSError: [Errno 122] Disk quota exceeded
