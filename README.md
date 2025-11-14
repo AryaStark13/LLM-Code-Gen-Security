@@ -45,6 +45,13 @@ python -m inference.inference_sft_batched \
 --dataset ShethArihant/CWEval-v1 \
 --splits core_c
 
+# AWS EC2 Instance Specs
+- Instance Type: g5.2xlarge
+- vCPUs: 8
+- AMI-ID: ami-0008030617fa01333
+
+Launch 4 instances and run the following commands on each instance.
+
 # AWS EC2 Instance Setup Instructions
 
 1. Clone the repository:
