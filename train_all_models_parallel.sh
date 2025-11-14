@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH -N 1
 #SBATCH -p GPU-shared
-#SBATCH -t 16:00:00
-#SBATCH --gpus=v100-32:1
+#SBATCH -t 12:00:00
+#SBATCH --gpus=h100-80:1
 #SBATCH -A cis240137p
-#SBATCH --array=0-2                    # 3 jobs: index 0, 1, 2
-#SBATCH --output=results/training/model_%a_output_%j.log
-#SBATCH --error=results/training/model_%a_error_%j.log
+#SBATCH --array=0-3                    # 4 jobs: index 0, 1, 2, 3
+#SBATCH --output=training/logs/model_%a_output_%j.log
+#SBATCH --error=training/logs/model_%a_error_%j.log
 
 # Load modules
 module load anaconda3/2024.10-1
@@ -24,11 +24,11 @@ export TORCH_HOME="/ocean/projects/cis240137p/asheth1/.cache/torch"
 export PROJECT_DIR="/ocean/projects/cis240137p/asheth1/LLM-Code-Gen-Security"
 cd $PROJECT_DIR
 
-mkdir -p results/training
+mkdir -p training
 
 # Define model configs
-CONFIGS=("qwen-config.yaml" "codellama-config.yaml" "codegemma-config.yaml")
-MODEL_NAMES=("Qwen2.5-Coder" "CodeLlama" "CodeGemma")
+CONFIGS=("qwen-config.yaml" "codellama-config.yaml" "codegemma-config.yaml" "deepseek-coder-config.yaml")
+MODEL_NAMES=("Qwen2.5-Coder" "CodeLlama" "CodeGemma" "DeepSeek-Coder")
 
 # Get config for this array task
 CONFIG=${CONFIGS[$SLURM_ARRAY_TASK_ID]}
