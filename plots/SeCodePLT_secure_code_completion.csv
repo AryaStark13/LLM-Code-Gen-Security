@@ -1,0 +1,7 @@
+Model,Correct (%),Correct Not Secure (%),Incorrect (%),Code Error (%)
+DeepSeek-1B,4,4,20,70
+DeepSeek-1B + SFT,15,22,52,9
+DeepSeek-7B,10,5,18,64
+DeepSeek-7B + SFT,30,16,48,4
+DeepSeek-7B + SFT + RLVR (Ours),55,18,23,4
+GPT-4o,55,17,27,0

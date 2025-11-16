@@ -16,20 +16,20 @@ import argparse
 MODEL_CONFIGS = [
     # ("deepseek-coder-1b", "instruct-no-fine-tuning", "DeepSeek-1B"),
     # ("deepseek-coder-1b", "CoT-SFT_only", "DeepSeek-1B\n + SFT"),
-    # ("deepseek-coder-7b", "instruct-no-fine-tuning", "DeepSeek-7B"),
-    # ("deepseek-coder-7b", "CoT-SFT_only", "DeepSeek-7B\n + SFT"),
+    ("deepseek-coder-7b", "instruct-no-fine-tuning", "DeepSeek-7B"),
+    ("deepseek-coder-7b", "CoT-SFT_only", "DeepSeek-7B\n + SFT"),
     ("deepseek-coder-7b", "CoT-SFT_RLVR", "DeepSeek-7B\n + SFT + RLVR\n(Ours)"),
     ("LLMs", "gpt-4o", "GPT-4o"),
 ]
 
-# MODEL_CONFIGS = [
-#     ("deepseek-coder-1b", "instruct-no-fine-tuning", "DeepSeek-1B"),
-#     ("deepseek-coder-1b", "CoT-SFT_only", "DeepSeek-1B\n + SFT"),
-#     ("deepseek-coder-7b", "instruct-no-fine-tuning", "DeepSeek-7B"),
-#     ("deepseek-coder-7b", "CoT-SFT_only", "DeepSeek-7B\n + SFT"),
-#     ("deepseek-coder-7b", "CoT-SFT_RLVR", "DeepSeek-7B\n + SFT + RLVR\n(Ours)"),
-#     ("LLMs", "gpt-4o", "GPT-4o"),
-# ]
+MODEL_CONFIGS = [
+    ("deepseek-coder-1b", "instruct-no-fine-tuning", "DeepSeek-1B"),
+    ("deepseek-coder-1b", "CoT-SFT_only", "DeepSeek-1B\n + SFT"),
+    ("deepseek-coder-7b", "instruct-no-fine-tuning", "DeepSeek-7B"),
+    ("deepseek-coder-7b", "CoT-SFT_only", "DeepSeek-7B\n + SFT"),
+    ("deepseek-coder-7b", "CoT-SFT_RLVR", "DeepSeek-7B\n + SFT + RLVR\n(Ours)"),
+    ("LLMs", "gpt-4o", "GPT-4o"),
+]
 
 # Color scheme matching the reference plot
 COLORS = {
@@ -149,9 +149,9 @@ def process_results(json_path):
         counts[category] += 1
     
     # Calculate percentages
-    total = 25  # Fixed total number of tasks
+    # total = 25  # Fixed total number of tasks
     # total = 386  # Fixed total number of tasks
-    # total = len(results)
+    total = len(results)
     percentages = {
         cat: (count / total * 100) if total > 0 else 0 
         for cat, count in counts.items()
@@ -210,6 +210,8 @@ def create_plot(data, output_path='secure_code_completion_plot.png'):
                 ax.text(bar.get_x() + bar.get_width()/2., 
                        bottom[i] + height/2.,
                        f'{int(val)}',
+                    #    f'{val:.1f}',
+                    #    f'{round(val)}',
                        ha='center', va='center', 
                        fontsize=10, fontweight='bold',
                     #    color='white' if cat == 'syntax_error' else 'black')
@@ -219,7 +221,7 @@ def create_plot(data, output_path='secure_code_completion_plot.png'):
     
     # Customize plot appearance
     ax.set_ylabel('Percentage (%)', fontsize=12)
-    ax.set_title('Python', fontsize=14, fontweight='bold')
+    ax.set_title('SeCodePLT Results on the Python Split (85 Examples)', fontsize=14, fontweight='bold')
     ax.set_xticks(x)
     ax.set_xticklabels(labels, rotation=45, ha='right', fontsize=10)
     # Make the RLVR label bold
@@ -235,9 +237,9 @@ def create_plot(data, output_path='secure_code_completion_plot.png'):
     ax.grid(axis='y', alpha=0.3, linestyle='--')
     
     plt.tight_layout()
-    plt.savefig(output_path, dpi=300, bbox_inches='tight')
-    print(f"\nPlot saved as '{output_path}'")
-    # plt.show()
+    # plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    # print(f"\nPlot saved as '{output_path}'")
+    plt.show()
 
 
 def main():
@@ -261,11 +263,11 @@ def main():
     for model_name, variant, label in MODEL_CONFIGS:
         # Construct path to results file
         if variant:
-            # json_path = base_path / model_name / variant / "SeCodePLT_unittests_results.json"
-            json_path = base_path / model_name / variant / "CWEval_unittests_results.json"
+            json_path = base_path / model_name / variant / "SeCodePLT_unittests_results.json"
+            # json_path = base_path / model_name / variant / "CWEval_unittests_results.json"
         else:
-            # json_path = base_path / model_name / "SeCodePLT_unittests_results.json"
-            json_path = base_path / model_name / "CWEval_unittests_results.json"
+            json_path = base_path / model_name / "SeCodePLT_unittests_results.json"
+            # json_path = base_path / model_name / "CWEval_unittests_results.json"
         
         percentages, counts, total = process_results(json_path)
         
