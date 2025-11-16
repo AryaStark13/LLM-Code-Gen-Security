@@ -1,0 +1,32 @@
+{
+  "summary": {
+    "total_entries": 85,
+    "error_cases": 0,
+    "evaluated_cases": 0,
+    "evaluation_rate": 0.0
+  },
+  "test_statistics": {
+    "total_tests_run": 0,
+    "total_tests_passed": 0,
+    "total_tests_failed": 0,
+    "overall_success_rate": 0,
+    "ids_with_0_tests_run": []
+  },
+  "success_breakdown": {
+    "all_passed": {
+      "count": 0,
+      "percentage": 0,
+      "ids": []
+    },
+    "partial_passed": {
+      "count": 0,
+      "percentage": 0,
+      "ids": []
+    },
+    "all_failed": {
+      "count": 0,
+      "percentage": 0,
+      "ids": []
+    }
+  }
+}
