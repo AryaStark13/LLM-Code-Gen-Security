@@ -496,7 +496,7 @@ def main():
     # Create WandB run name
     model_short_name = model_name.split("/")[-1]
     epochs = config['training']['epochs']
-    wandb_run_name = f"{model_short_name}_sft_{epochs}-epochs"
+    wandb_run_name = f"PSC-2_{model_short_name}_sft_{epochs}-epochs"
     
     # Initialize WandB
     dataset_names = [d['name'] for d in config['datasets']]

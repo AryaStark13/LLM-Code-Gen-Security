@@ -55,7 +55,7 @@ lora:
 training:
   epochs: 2
   learning_rate: 5.0e-5
-  batch_size: 5
+  batch_size: 4
   eval_steps: 100
   save_steps: 500
   max_output_length: 2048
@@ -68,7 +68,7 @@ training:
   token_representation: "mean_pooled"
 
 sft_config:
-  gradient_accumulation_steps: 2
+  gradient_accumulation_steps: 4
   gradient_checkpointing: true
   max_grad_norm: 1.0
   bf16: true

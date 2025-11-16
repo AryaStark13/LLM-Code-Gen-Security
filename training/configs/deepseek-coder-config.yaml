@@ -70,8 +70,8 @@ lora:
 training:
   epochs: 2
   learning_rate: 5.0e-5
-  batch_size: 2
-  eval_steps: 75
+  batch_size: 4
+  eval_steps: 100
   save_steps: 500
   max_output_length: 2048
   
