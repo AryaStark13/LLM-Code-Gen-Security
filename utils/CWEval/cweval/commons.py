@@ -1,3 +1,4 @@
+# utils/CWEval/cweval/commons.py
 import multiprocessing as mp
 import os
 import subprocess
@@ -178,15 +179,94 @@ def complete_code(code: str, lang: str) -> str:
         return code
 
 
+# def get_code_from(
+#     msg: str,
+#     only_last: bool = False,
+#     only_first: bool = False,
+#     add_new_line: bool = False,
+# ) -> str:
+#     assert not (
+#         only_last and only_first
+#     ), '`only_last` and `only_first` cannot be both True'
+#     tail = '\n' if add_new_line else ''
+#     code_blocks: List[str] = []
+#     msg_lines = msg.splitlines()
+#     i_line = 0
+#     while i_line < len(msg_lines):
+#         line = msg_lines[i_line]
+#         if line.startswith('```'):
+#             code_lines = []
+#             i_line += 1
+#             while i_line < len(msg_lines):
+#                 line = msg_lines[i_line]
+#                 if line.startswith('```'):
+#                     break
+#                 code_lines.append(line)
+#                 i_line += 1
+#             # end while for this code block
+#             code_blocks.append('\n'.join(code_lines) + tail)
+#             if only_first:
+#                 return code_blocks[0]
+#         # end if for this code block
+#         i_line += 1
+#     # end while for all code blocks
+#     if only_last:
+#         return code_blocks[-1]
+#     return '\n'.join(code_blocks)
+
+def get_code_from_tags(
+    msg: str,
+    tag_name: str = 'code',
+    only_last: bool = False,
+    only_first: bool = False,
+    add_new_line: bool = False,
+) -> str:
+    """Extract code from XML-style tags like <code>...</code>"""
+    assert not (
+        only_last and only_first
+    ), '`only_last` and `only_first` cannot be both True'
+    tail = '\n' if add_new_line else ''
+    
+    import re
+    # Match opening and closing tags
+    pattern = f'<{tag_name}>(.*?)</{tag_name}>'
+    matches = re.findall(pattern, msg, re.DOTALL)
+    
+    if not matches:
+        return ''
+    
+    if only_first:
+        return matches[0].strip() + tail
+    if only_last:
+        return matches[-1].strip() + tail
+    
+    return '\n'.join(m.strip() for m in matches) + tail
+
+
 def get_code_from(
     msg: str,
     only_last: bool = False,
     only_first: bool = False,
     add_new_line: bool = False,
 ) -> str:
+    """Extract code from either triple backticks or <code> tags"""
     assert not (
         only_last and only_first
     ), '`only_last` and `only_first` cannot be both True'
+    
+    # First try to extract from <code> tags
+    code_from_tags = get_code_from_tags(
+        msg, 
+        tag_name='code',
+        only_last=only_last,
+        only_first=only_first,
+        add_new_line=add_new_line
+    )
+    
+    if code_from_tags:
+        return code_from_tags
+    
+    # Fall back to triple backticks
     tail = '\n' if add_new_line else ''
     code_blocks: List[str] = []
     msg_lines = msg.splitlines()
@@ -202,14 +282,12 @@ def get_code_from(
                     break
                 code_lines.append(line)
                 i_line += 1
-            # end while for this code block
             code_blocks.append('\n'.join(code_lines) + tail)
             if only_first:
                 return code_blocks[0]
-        # end if for this code block
         i_line += 1
-    # end while for all code blocks
-    if only_last:
+    
+    if only_last and code_blocks:
         return code_blocks[-1]
     return '\n'.join(code_blocks)
 

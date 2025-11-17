@@ -1,3 +1,4 @@
+# utils/CWEval/cweval/generate.py
 """
 Expected directory structure:
 
@@ -36,6 +37,7 @@ from tqdm import tqdm
 from cweval.ai import AIAPI
 from cweval.commons import BENCHMARK_DIR, LANGS
 from cweval.ppt import make_prompt
+from cweval.local_ai import LocalModelAPI
 
 
 class Gener:
@@ -52,8 +54,12 @@ class Gener:
         langs: List[str] = LANGS,
         exclude_path: List[str] = [],
         include_path: List[str] = [],
+        # local model parameters
+        use_local_model: bool = False,
+        base_model_path: str = None,
+        sft_lora_adapter_path: str = None,
         # AI parameters
-        n: int = 20,
+        n: int = 20, # of samples per task
         max_completion_tokens: int = 2048,
         temperature: float = 0.8,
         **kwargs,
@@ -64,6 +70,10 @@ class Gener:
         self.langs = langs
         self.exclude_path = exclude_path
         self.include_path = include_path
+        # local model
+        self.use_local_model = use_local_model
+        self.base_model_path = base_model_path
+        self.sft_lora_adapter_path = sft_lora_adapter_path
         print(f'Using langs: {self.langs}')
         self.ai_kwargs = {
             'n': n,
@@ -144,6 +154,41 @@ class Gener:
 
         return cases
 
+    # @staticmethod
+    # def _gen_case(
+    #     ai: str,
+    #     ppt: str,
+    #     case: Dict[str, str],
+    #     ai_kwargs: Dict[str, Any],
+    #     rank: int,
+    # ) -> None:
+    #     num_samples = ai_kwargs.get('n', 1)
+    #     for i in range(num_samples):
+    #         out_path = case['out_path_template'].format(index=i)
+    #         if not os.path.exists(out_path):
+    #             break
+    #     else:
+    #         print(
+    #             f'{case["out_path_template"]} already completed, skipping', flush=True
+    #         )
+    #         return
+
+    #     aiapi = AIAPI(ai, **ai_kwargs)
+    #     prompt = make_prompt(ppt)
+    #     resps = prompt.req_ai(
+    #         aiapi,
+    #         case['lang'],
+    #         case['code_prompt'],
+    #         metadata={
+    #             k: v for k, v in case.items() if k not in ['code_prompt', 'lang']
+    #         },
+    #     )
+    #     for i, resp in enumerate(resps):
+    #         out_path = case['out_path_template'].format(index=i)
+    #         os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    #         with open(out_path, 'w') as f:
+    #             f.write(resp)
+
     @staticmethod
     def _gen_case(
         ai: str,
@@ -151,6 +196,9 @@ class Gener:
         case: Dict[str, str],
         ai_kwargs: Dict[str, Any],
         rank: int,
+        use_local_model: bool = False,
+        base_model_path: str = None,
+        sft_lora_adapter_path: str = None,
     ) -> None:
         num_samples = ai_kwargs.get('n', 1)
         for i in range(num_samples):
@@ -163,7 +211,24 @@ class Gener:
             )
             return
 
-        aiapi = AIAPI(ai, **ai_kwargs)
+        # Choose API based on use_local_model flag
+        if use_local_model:
+            if rank == 0:  # Only create model once per process
+                aiapi = LocalModelAPI(
+                    base_model_path=base_model_path,
+                    sft_lora_adapter_path=sft_lora_adapter_path,
+                    **ai_kwargs
+                )
+            else:
+                # For multiprocessing, each process needs its own model
+                aiapi = LocalModelAPI(
+                    base_model_path=base_model_path,
+                    sft_lora_adapter_path=sft_lora_adapter_path,
+                    **ai_kwargs
+                )
+        else:
+            aiapi = AIAPI(ai, **ai_kwargs)
+        
         prompt = make_prompt(ppt)
         resps = prompt.req_ai(
             aiapi,
@@ -180,15 +245,39 @@ class Gener:
                 f.write(resp)
 
     def gen(self) -> None:
+        # Note: For local models with num_proc > 1, each process will load its own model
+        # This can be memory intensive. Consider using num_proc=1 for large models.
+        if self.use_local_model and self.num_proc > 1:
+            print(
+                "WARNING: Using local model with multiple processes. "
+                "Each process will load its own copy of the model. "
+                "Consider setting num_proc=1 to save memory."
+            )
+        
         p_map(
             self._gen_case,
             [self.model] * len(self.cases),
             [self.ppt] * len(self.cases),
             self.cases.values(),
             [self.ai_kwargs] * len(self.cases),
-            range(len(self.cases)),  # workaround: index as rank
-            num_cpus=self.num_proc,
+            range(len(self.cases)),
+            [self.use_local_model] * len(self.cases),
+            [self.base_model_path] * len(self.cases),
+            [self.sft_lora_adapter_path] * len(self.cases),
+            num_cpus=self.num_proc if not self.use_local_model else 1,  # Use single process for local model
         )
+
+
+    # def gen(self) -> None:
+    #     p_map(
+    #         self._gen_case,
+    #         [self.model] * len(self.cases),
+    #         [self.ppt] * len(self.cases),
+    #         self.cases.values(),
+    #         [self.ai_kwargs] * len(self.cases),
+    #         range(len(self.cases)),  # workaround: index as rank
+    #         num_cpus=self.num_proc,
+    #     )
 
 
 if __name__ == "__main__":

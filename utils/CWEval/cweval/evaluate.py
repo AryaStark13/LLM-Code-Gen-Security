@@ -1,3 +1,4 @@
+# utils/CWEval/cweval/evaluate.py
 """
 Pipeline utilities to parse tasks, compile (for compiled langs), run pytest,
 and emit detailed JSON reports.
