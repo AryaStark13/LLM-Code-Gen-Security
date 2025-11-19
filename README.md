@@ -19,7 +19,7 @@ pip install -r requirements/requirements_linux.txt
 4. Request Compute Node:
 ```bash
 # For H-100 (slower time get)
-srun --partition=GPU-shared --gres=gpu:h100-80:1 --time=1:00:00 --pty bash
+srun --partition=GPU-shared --gres=gpu:h100-80:1 --time=3:00:00 --pty bash
 
 # For V-100 (faster to get)
 srun --partition=GPU-shared --gres=gpu:v100-32:1 --time=1:00:00 --pty bash
@@ -170,7 +170,7 @@ Replace `<model-name>` with the actual name of the model whose results you want 
 # the parent directory should point to the model results folder present in ./results/CWEval/*
 # this should contain a file named CWEval_Results.json
 python -m scripts.convert_cweval_json_to_eval \
---parent deepseek-coder-7b/CoT-SFT_RLVR-2
+--parent deepseek-coder-7b/CoT-SFT_RLVR-2-changed
 ```
 
 2. 
@@ -219,3 +219,13 @@ php         2,005
 c           1,374
 ruby        573
 go          507
+
+python -m cweval.generate gen \
+    --use_local_model=True \
+    --base_model_path="deepseek-ai/deepseek-coder-7b-instruct-v1.5" \
+    --sft_lora_adapter_path="ShethArihant/PSC-2_deepseek-coder-7b-instruct-v1.5_sft_2-epochs" \
+    --ppt=cot \
+    --n=1 \
+    --num_proc=1 \
+    --max_completion_tokens=2048 \
+    --temperature=0.8
