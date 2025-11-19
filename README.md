@@ -1,3 +1,27 @@
+python -m scripts.get_llm_outputs_parallel \
+--dataset "ShethArihant/SeCodePLT-updated-CoT-v4" \
+--splits test \
+--model_name "gpt-5" \
+-o "results/CoT_SFT/LLMs/gpt-5/SecCodePLT_CoT_SFT_Results.json" \
+--max_workers 8
+
+
+### CWEVal with GPT-5-Mini
+python -m scripts.get_llm_outputs_parallel \
+--dataset "ShethArihant/CWEval-v1" \
+--splits core_c core_cpp core_py core_js core_go lang_c \
+--model_name "gpt-5-mini" \
+-o "results/CWEval/LLMs/gpt-5-mini/CWEval_Results.json" \
+--max_workers 8
+
+### CWEval with GPT-5
+python -m scripts.get_llm_outputs_parallel \
+--dataset "ShethArihant/CWEval-v1" \
+--splits core_c core_cpp core_py core_js core_go lang_c \
+--model_name "gpt-5" \
+-o "results/CWEval/LLMs/gpt-5/CWEval_Results.json" \
+--max_workers 8
+
 # PSC Cluster Setup
 
 1. Setup Conda and CUDA
@@ -204,7 +228,7 @@ report_pass_at_k \
 
 ### ONLY for running the full pipeline (all languages) ###
 # pipeline will execute tests for all languages
-python cweval/evaluate.py pipeline \
+python -m cweval.evaluate pipeline \
 --eval_path $EVAL_PATH \
 --langs py
 ```

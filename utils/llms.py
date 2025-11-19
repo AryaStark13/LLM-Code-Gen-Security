@@ -94,14 +94,14 @@ class OpenAI:
                     raise e
 
         message = response.choices[0].message
-        if getattr(message, "reasoning_content", None):
-            # Response with reasoning
-            return response, getattr(message, "reasoning_content", None) # llm_think_text
-        if getattr(message, "content", None):
-            # Normal response
-            return response, getattr(message, "content", None)
+        # if getattr(message, "reasoning_content", None):
+        #     # Response with reasoning
+        #     return response, getattr(message, "reasoning_content", None) # llm_think_text
+        # if getattr(message, "content", None):
+        #     # Normal response
+        #     return response, getattr(message, "content", None)
         
-        # llm_response_text = getattr(message, "content", None)
-        # # llm_think_text = getattr(message, "reasoning_content", None)
-        # return response, llm_response_text
-        # # return response, response.choices[0].message.content
+        llm_response_text = getattr(message, "content", None)
+        # llm_think_text = getattr(message, "reasoning_content", None)
+        return response, llm_response_text
+        # return response, response.choices[0].message.content
