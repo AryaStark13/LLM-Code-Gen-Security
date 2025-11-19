@@ -157,7 +157,7 @@ def main():
     
     for item in results:
         task_id = item.get("id")  # e.g., "cwe_020_0_c"
-        split = item.get("split")  # e.g., "core_c"
+        split = item.get("split", "core_py")  # e.g., "core_c". fallback to "core_py" if missing since older results are Python-only and dont have split field
         out_str = item.get("output_with_tuning", "")
 
         if not task_id or not split:
@@ -189,7 +189,7 @@ def main():
     print("\nNext steps")
     print("----------")
     print(f"cd {args.cweval_root}")
-    print(f"python cweval/evaluate.py pipeline --eval_path evals/{eval_dir_name} --docker True")
+    print(f"export EVAL_PATH=evals/{eval_dir_name}")
 
 if __name__ == "__main__":
     main()
