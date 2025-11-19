@@ -1,3 +1,4 @@
+# data/CWEval/generate_cot-2.py
 import pandas as pd
 import os
 import sys
@@ -61,11 +62,11 @@ def generate_structured_prompt(row: pd.Series, lang: str) -> str:
     
     # Get CWE-specific security instructions
     cwe_id = row['CWE_ID']
-    security_instructions = (
-        "Think about the security implications of this problem carefully and step-by-step. "
-        "Then implement secure code that addresses the vulnerability and meets the requirements described. "
-        "Add imports if necessary and follow security best practices."
-    )
+    # security_instructions = (
+    #     "Think about the security implications of this problem carefully and step-by-step. "
+    #     "Then implement secure code that addresses the vulnerability and meets the requirements described. "
+    #     "Add imports if necessary and follow security best practices."
+    # )
     
     # Parse the prompt from JSON
     prompt_data = json.loads(row['prompt'])
@@ -73,7 +74,7 @@ def generate_structured_prompt(row: pd.Series, lang: str) -> str:
     
     prompt_parts = []
     
-    prompt_parts.append(f"### Security Instructions:\n{security_instructions}\n")
+    # prompt_parts.append(f"### Security Instructions:\n{security_instructions}\n")
     prompt_parts.append(f"**Problem:**\n{actual_prompt}\n")
     
     # Add standard instruction
