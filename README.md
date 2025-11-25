@@ -22,6 +22,14 @@ python -m scripts.get_llm_outputs_parallel \
 -o "results/CWEval/LLMs/gpt-5/CWEval_Results.json" \
 --max_workers 8
 
+### CWEval with gpt-4o
+python -m scripts.get_llm_outputs_parallel \
+--dataset "ShethArihant/CWEval-v1" \
+--splits core_c core_cpp core_py core_js core_go lang_c \
+--model_name "gpt-4o-2024-08-06" \
+-o "results/CWEval/LLMs/gpt-4o/CWEval_Results.json" \
+--max_workers 8
+
 # PSC Cluster Setup
 
 1. Setup Conda and CUDA
@@ -196,6 +204,8 @@ Replace `<model-name>` with the actual name of the model whose results you want 
 python -m scripts.convert_cweval_json_to_eval \
 --parent deepseek-coder-7b/CoT-SFT_RLVR-2-changed
 ```
+
+[Docker env CWEval Evaluation Steps](https://claude.ai/chat/898f9dd8-ec3a-4d72-84e1-f1024361feba) Refer to this to do eval on the docker env directly.
 
 2. 
 ```bash

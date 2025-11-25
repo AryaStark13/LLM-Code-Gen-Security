@@ -10,3 +10,4 @@ unsloth_compiled_cache/
 wandb/
 *.log
 *accessKeys.csv
+reports/

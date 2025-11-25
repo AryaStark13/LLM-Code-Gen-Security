@@ -13,18 +13,20 @@ import argparse
 
 
 # Define model configurations: (model_folder, variant_folder, display_label)
+# MODEL_CONFIGS = [
+#     # ("deepseek-coder-1b", "instruct-no-fine-tuning", "DeepSeek-1B"),
+#     # ("deepseek-coder-1b", "CoT-SFT_only", "DeepSeek-1B\n + SFT"),
+#     ("deepseek-coder-7b", "instruct-no-fine-tuning", "DeepSeek-7B"),
+#     ("deepseek-coder-7b", "CoT-SFT_only", "DeepSeek-7B\n + SFT"),
+#     ("deepseek-coder-7b", "CoT-SFT_RLVR", "DeepSeek-7B\n + SFT + RLVR\n(Ours)"),
+#     ("LLMs", "gpt-4o", "GPT-4o"),
+#     # ("LLMs", "gpt-5", "GPT-5"),
+#     # ("LLMs", "gpt-5-mini", "GPT-5-Mini"),
+# ]
+
 MODEL_CONFIGS = [
     # ("deepseek-coder-1b", "instruct-no-fine-tuning", "DeepSeek-1B"),
     # ("deepseek-coder-1b", "CoT-SFT_only", "DeepSeek-1B\n + SFT"),
-    ("deepseek-coder-7b", "instruct-no-fine-tuning", "DeepSeek-7B"),
-    ("deepseek-coder-7b", "CoT-SFT_only", "DeepSeek-7B\n + SFT"),
-    ("deepseek-coder-7b", "CoT-SFT_RLVR", "DeepSeek-7B\n + SFT + RLVR\n(Ours)"),
-    ("LLMs", "gpt-4o", "GPT-4o"),
-]
-
-MODEL_CONFIGS = [
-    ("deepseek-coder-1b", "instruct-no-fine-tuning", "DeepSeek-1B"),
-    ("deepseek-coder-1b", "CoT-SFT_only", "DeepSeek-1B\n + SFT"),
     ("deepseek-coder-7b", "instruct-no-fine-tuning", "DeepSeek-7B"),
     ("deepseek-coder-7b", "CoT-SFT_only", "DeepSeek-7B\n + SFT"),
     ("deepseek-coder-7b", "CoT-SFT_RLVR", "DeepSeek-7B\n + SFT + RLVR\n(Ours)"),
@@ -149,9 +151,9 @@ def process_results(json_path):
         counts[category] += 1
     
     # Calculate percentages
-    # total = 25  # Fixed total number of tasks
+    total = 25  # Fixed total number of tasks
     # total = 386  # Fixed total number of tasks
-    total = len(results)
+    # total = len(results)
     percentages = {
         cat: (count / total * 100) if total > 0 else 0 
         for cat, count in counts.items()
@@ -177,7 +179,7 @@ def create_plot(data, output_path='secure_code_completion_plot.png'):
     output_dir = Path("plots")
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / output_path
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(14, 5))
     
     # Prepare data for stacking
     labels = [d['label'] for d in data]
@@ -203,7 +205,7 @@ def create_plot(data, output_path='secure_code_completion_plot.png'):
         
         # Add percentage labels on bars (only if segment is large enough)
         for i, (bar, val) in enumerate(zip(bars, values)):
-            if val > 3:  # Only show label if segment is visible
+            if val > 6:  # Only show label if segment is visible
                 height = bar.get_height()
                 count = data[i]['counts'][cat]
                 # Show percentage value
@@ -213,17 +215,19 @@ def create_plot(data, output_path='secure_code_completion_plot.png'):
                     #    f'{val:.1f}',
                     #    f'{round(val)}',
                        ha='center', va='center', 
-                       fontsize=10, fontweight='bold',
+                       fontsize=16, fontweight='bold',
                     #    color='white' if cat == 'syntax_error' else 'black')
                        color='white' if cat == 'code_error' else 'black')
         
         bottom += values
     
     # Customize plot appearance
-    ax.set_ylabel('Percentage (%)', fontsize=12)
-    ax.set_title('SeCodePLT Results on the Python Split (85 Examples)', fontsize=14, fontweight='bold')
+    ax.set_ylabel('Percentage (%)', fontsize=16)
+    ax.set_title('CWEval Results on the Python Split (25 Examples)', fontsize=22, fontweight='bold')
+    # ax.set_title('CWEval Results on the Python Split (85 Examples)', fontsize=14, fontweight='bold')
     ax.set_xticks(x)
-    ax.set_xticklabels(labels, rotation=45, ha='right', fontsize=10)
+    # ax.set_xticklabels(labels, rotation=45, ha='right', fontsize=10)
+    ax.set_xticklabels(labels, fontsize=16)
     # Make the RLVR label bold
     tick_labels = ax.get_xticklabels()
     for tick_label in tick_labels:
@@ -233,13 +237,16 @@ def create_plot(data, output_path='secure_code_completion_plot.png'):
             # change actual background color of label like a highlight
             tick_label.set_bbox(dict(facecolor='#FFFFE0', edgecolor='none', pad=2.0))
     ax.set_ylim(0, 100)
-    ax.legend(loc='upper left', bbox_to_anchor=(1.02, 1), frameon=True)
+    # make the legend bold
+    ax.legend(loc='upper left', bbox_to_anchor=(1.02, 1), frameon=True, fontsize=16, 
+              title='Result Categories', title_fontsize=16,
+              fancybox=True)
     ax.grid(axis='y', alpha=0.3, linestyle='--')
     
     plt.tight_layout()
-    # plt.savefig(output_path, dpi=300, bbox_inches='tight')
-    # print(f"\nPlot saved as '{output_path}'")
-    plt.show()
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    print(f"\nPlot saved as '{output_path}'")
+    # plt.show()
 
 
 def main():
@@ -263,11 +270,11 @@ def main():
     for model_name, variant, label in MODEL_CONFIGS:
         # Construct path to results file
         if variant:
-            json_path = base_path / model_name / variant / "SeCodePLT_unittests_results.json"
-            # json_path = base_path / model_name / variant / "CWEval_unittests_results.json"
+            # json_path = base_path / model_name / variant / "SeCodePLT_unittests_results.json"
+            json_path = base_path / model_name / variant / "CWEval_unittests_results.json"
         else:
-            json_path = base_path / model_name / "SeCodePLT_unittests_results.json"
-            # json_path = base_path / model_name / "CWEval_unittests_results.json"
+            # json_path = base_path / model_name / "SeCodePLT_unittests_results.json"
+            json_path = base_path / model_name / "CWEval_unittests_results.json"
         
         percentages, counts, total = process_results(json_path)
         
