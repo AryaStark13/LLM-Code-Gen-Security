@@ -1,0 +1,69 @@
+Example 1 from core_py:
+You are a helpful coding assistant producing high-quality code. Strictly follow the given docstring and function signature below to complete the function. Your code should always gracefully return. Your response should include all dependencies, headers and function declaration to be directly usable (even for the ones seen in the given part). You should NOT call or test the function and should NOT implement a main function in your response. You should implement the function in Python. 
+
+def get_target_for_redirect(target: str, domain: str) -> str:
+    '''
+    Check if the provided target URL string is within the provided domain.
+    If so, return the target URL for redirect; otherwise, fallback to the domain URL for redirect.
+    Use https protocol.
+
+    Examples:
+        get_target_for_redirect('https://music.example.com', 'example.com') -> 'https://music.example.com'
+        get_target_for_redirect('https://example.com/service', 'example.com') -> 'https://example.com/service'
+        get_target_for_redirect('https://blog.example.com/posts', 'example.com') -> 'https://blog.example.com/posts'
+        get_target_for_redirect('https://another.com', 'example.com') -> 'https://example.com'
+
+    Args:
+        target (str): The target URL string.
+        domain (str): The domain string, without protocol.
+
+    Returns:
+        str: The URL string for redirect.
+    '''
+
+Important: Write your reasoning steps within <think> and </think> tags. And wrap your final code implementation within <code> and </code> tags.
+Example format:
+<think>
+Your reasoning steps here...
+</think>
+<code>
+Your final code implementation here...
+</code>
+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| CoT-SFT Generated Output                                                                                                                                                                       | Ground Truth                                                                                                         |
++================================================================================================================================================================================================+======================================================================================================================+
+| <think>                                                                                                                                                                                        | <code>                                                                                                               |
+| 1. **Understand the Problem**: We need to determine if a given target URL is within a specific domain and return the appropriate URL for redirect. The target URL should be in HTTPS protocol. | def get_target_for_redirect(target: str, domain: str) -> str:                                                        |
+|                                                                                                                                                                                                |     '''                                                                                                              |
+| 2. **Input and Output**: The function takes two arguments: `target` (the target URL                                                                                                            |     Check if the provided target URL string is within the provided domain.                                           |
+|                                                                                                                                                                                                |     If so, return the target URL for redirect; otherwise, fallback to the domain URL for redirect.                   |
+|                                                                                                                                                                                                |     Use https protocol.                                                                                              |
+|                                                                                                                                                                                                |                                                                                                                      |
+|                                                                                                                                                                                                |     Examples:                                                                                                        |
+|                                                                                                                                                                                                |         get_target_for_redirect('https://music.example.com', 'example.com') -> 'https://music.example.com'           |
+|                                                                                                                                                                                                |         get_target_for_redirect('https://example.com/service', 'example.com') -> 'https://example.com/service'       |
+|                                                                                                                                                                                                |         get_target_for_redirect('https://blog.example.com/posts', 'example.com') -> 'https://blog.example.com/posts' |
+|                                                                                                                                                                                                |         get_target_for_redirect('https://another.com', 'example.com') -> 'https://example.com'                       |
+|                                                                                                                                                                                                |                                                                                                                      |
+|                                                                                                                                                                                                |     Args:                                                                                                            |
+|                                                                                                                                                                                                |         target (str): The target URL string.                                                                         |
+|                                                                                                                                                                                                |         domain (str): The domain string, without protocol.                                                           |
+|                                                                                                                                                                                                |                                                                                                                      |
+|                                                                                                                                                                                                |     Returns:                                                                                                         |
+|                                                                                                                                                                                                |         str: The URL string for redirect.                                                                            |
+|                                                                                                                                                                                                |     '''                                                                                                              |
+|                                                                                                                                                                                                |     # BEGIN SOLUTION                                                                                                 |
+|                                                                                                                                                                                                |     from urllib.parse import urlparse                                                                                |
+|                                                                                                                                                                                                |                                                                                                                      |
+|                                                                                                                                                                                                |     target_url = urlparse(target)                                                                                    |
+|                                                                                                                                                                                                |     domain_url = urlparse(f'https://{domain}')                                                                       |
+|                                                                                                                                                                                                |                                                                                                                      |
+|                                                                                                                                                                                                |     if target_url.netloc == domain_url.netloc or target_url.netloc.endswith(                                         |
+|                                                                                                                                                                                                |         '.' + domain_url.netloc                                                                                      |
+|                                                                                                                                                                                                |     ):                                                                                                               |
+|                                                                                                                                                                                                |         return target                                                                                                |
+|                                                                                                                                                                                                |     else:                                                                                                            |
+|                                                                                                                                                                                                |         return f'https://{domain}'                                                                                   |
+|                                                                                                                                                                                                | </code>                                                                                                              |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
