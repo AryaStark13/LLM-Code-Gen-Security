@@ -26,14 +26,18 @@ class CustomStopCriteria(StoppingCriteria):
         return True
 
 def load_base_model_and_tokenizer(base_model_path):
+    print("Base Model Path:", base_model_path)
+    is_local = os.path.isdir(base_model_path)
     base_model = AutoModelForCausalLM.from_pretrained(
         base_model_path,
-        torch_dtype=torch.float16,
+        # torch_dtype=torch.float16,
+        torch_dtype=torch.bfloat16,
         device_map="auto",
-        trust_remote_code=True
+        trust_remote_code=True,
+        local_files_only=is_local
     )
 
-    tokenizer = AutoTokenizer.from_pretrained(base_model_path, trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained(base_model_path, trust_remote_code=True, local_files_only=is_local)
     
     # Set pad token if not already set
     if tokenizer.pad_token is None:
@@ -46,7 +50,13 @@ def load_base_model_and_tokenizer(base_model_path):
     return base_model, tokenizer
 
 def load_sft_lora_adapter(base_model, sft_lora_adapter_path):
-    sft_lora_model = PeftModel.from_pretrained(base_model, sft_lora_adapter_path)
+    print("SFT LoRA Adapter Path:", sft_lora_adapter_path)
+    is_local = os.path.isdir(sft_lora_adapter_path)
+    sft_lora_model = PeftModel.from_pretrained(
+        base_model,
+        sft_lora_adapter_path,
+        local_files_only=is_local
+    )
     return sft_lora_model
 
 def merge_sft_lora_adapter(sft_lora_model):
@@ -116,6 +126,7 @@ def run_full_evaluation(model, tokenizer, stopping_criteria, eval_dataset, split
         # Create result entries for each example in the batch
         for idx, (example, generated_output) in enumerate(zip(batch_examples, generated_outputs)):
             global_idx = batch_start + idx
+            cot_steps = ""
             
             result = {
                 "split": split_name,
@@ -124,9 +135,11 @@ def run_full_evaluation(model, tokenizer, stopping_criteria, eval_dataset, split
                 "id": example.get("id", ""),
                 "CWE_ID": example.get("CWE_ID", ""),
                 "prompt": example["prompt"][0]["content"],
-                "ground_truth_cot": example.get("cot_steps", ""),
+                # "ground_truth_cot": example.get("cot_steps", ""),
+                "ground_truth_cot": cot_steps,
                 "ground_truth_code": example.get("completion", "")[0]["content"] if example.get("completion") else "",
-                "ground_truth_full": example.get("cot_steps", "") + (example.get("completion", "")[0]["content"] if example.get("completion") else ""),
+                # "ground_truth_full": example.get("cot_steps", "") + (example.get("completion", "")[0]["content"] if example.get("completion") else ""),
+                "ground_truth_full": cot_steps + (example.get("completion", "")[0]["content"] if example.get("completion") else ""),
                 "y_negative": example.get("y_negative", ""),
                 "output_without_tuning": "",
                 "output_with_tuning": generated_output,
@@ -282,7 +295,8 @@ def main():
                 print(f"\n###### Example {i+1} from {split}: ######")
                 print(example_prompts[i])
 
-                ground_truth_cot = eval_dataset[i].get("cot_steps", "")
+                # ground_truth_cot = eval_dataset[i].get("cot_steps", "")
+                ground_truth_cot = ""
                 ground_truth_code = eval_dataset[i].get("completion", [{}])[0].get("content", "")
                 ground_truth = ground_truth_cot + ground_truth_code
 
