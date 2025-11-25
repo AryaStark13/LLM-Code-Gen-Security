@@ -116,13 +116,17 @@ def extract_task_description(task_content, lang):
         
         if begin_solution_match:
             before_solution = task_content[:begin_solution_match.start()].strip()
-            # Find the docstring
-            docstring_match = re.search(r"'''(.*?)'''", before_solution, re.DOTALL)
-            if not docstring_match:
-                docstring_match = re.search(r'"""(.*?)"""', before_solution, re.DOTALL)
+
+            # return everything before # BEGIN SOLUTION
+            return before_solution
+        
+            # # Find the docstring
+            # docstring_match = re.search(r"'''(.*?)'''", before_solution, re.DOTALL)
+            # if not docstring_match:
+            #     docstring_match = re.search(r'"""(.*?)"""', before_solution, re.DOTALL)
             
-            if docstring_match:
-                return docstring_match.group(1).strip()
+            # if docstring_match:
+            #     return docstring_match.group(1).strip()
         print("Warning: Could not extract Python docstring.")
         return ""
     
@@ -142,19 +146,22 @@ def extract_task_description(task_content, lang):
                 begin_solution_line_start += 1
             
             content = task_content[start_idx:begin_solution_line_start].strip()
-            
-            # Remove the function signature line (last non-empty line before BEGIN SOLUTION)
-            lines = content.split('\n')
-            # Find the last line that looks like a function signature
-            for i in range(len(lines) - 1, -1, -1):
-                line = lines[i].strip()
-                if line and ('{' in line or line.endswith(')')):
-                    # This is the function signature line, remove it
-                    lines = lines[:i]
-                    break
 
-            # return with comment markers
-            return '\n'.join(lines).strip()
+            # return the whole content till // BEGIN SOLUTION
+            return content
+            
+            # # Remove the function signature line (last non-empty line before BEGIN SOLUTION)
+            # lines = content.split('\n')
+            # # Find the last line that looks like a function signature
+            # for i in range(len(lines) - 1, -1, -1):
+            #     line = lines[i].strip()
+            #     if line and ('{' in line or line.endswith(')')):
+            #         # This is the function signature line, remove it
+            #         lines = lines[:i]
+            #         break
+
+            # # return with comment markers
+            # return '\n'.join(lines).strip()
             
             # comment_block = '\n'.join(lines).strip()
             
@@ -242,7 +249,8 @@ def create_prompt_from_task(task_content, lang):
     task_description = extract_task_description(task_content, lang)
     task_description = task_description.strip()
     
-    function_signature = extract_function_signature(task_content, lang)
+    # No separate function signature
+    # function_signature = extract_function_signature(task_content, lang)
     
     # Build structured prompt
     prompt_parts = []
@@ -266,10 +274,10 @@ def create_prompt_from_task(task_content, lang):
         prompt_parts.append(task_description)
         prompt_parts.append("")  # Empty line
     
-    # Add function signature
-    if function_signature:
-        prompt_parts.append(f"Function signature: {function_signature}")
-        prompt_parts.append("")  # Empty line
+    # # Add function signature
+    # if function_signature:
+    #     prompt_parts.append(f"Function signature: {function_signature}")
+    #     prompt_parts.append("")  # Empty line
     
     # Add instructions
     instructions = """Important: Write your reasoning steps within <think> and </think> tags. And wrap your final code implementation within <code> and </code> tags.
