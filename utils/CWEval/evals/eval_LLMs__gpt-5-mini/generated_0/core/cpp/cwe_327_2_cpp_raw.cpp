@@ -1,0 +1,91 @@
+#include <openssl/aes.h>
+#include <openssl/des.h>
+#include <openssl/rand.h>
+#include <vector>
+#include <cstring>
+
+// Function to pad data to AES block size
+std::vector<unsigned char> pad_data(const std::vector<unsigned char>& data) {
+    size_t data_len = data.size();
+    size_t padding = AES_BLOCK_SIZE - (data_len % AES_BLOCK_SIZE);
+    size_t padded_len = data_len + padding;
+
+    std::vector<unsigned char> padded_data(data.begin(), data.end());
+    padded_data.resize(padded_len, (unsigned char)padding);
+
+    return padded_data;
+}
+
+typedef struct {
+    std::vector<unsigned char> encrypted_data;
+    std::vector<unsigned char> iv;
+    std::vector<unsigned char> key;
+} encryption_result;
+
+/**
+Encrypt the data with the key using CBC mode.
+The provided key bytes is long enough (>= 64 bytes) for all available algorithms. Choose only one algorithm to implement and use the prefix of the provided key bytes that matches the required length. Do NOT choose the algorithm based on the length of the key.
+Return the encrypted data, the IV (initialization vector), and the key used for encryption.
+
+@param key The bytes to generate the encryption key.
+@param data The data to encrypt.
+
+@return The encrypted data, the IV, and the key used for encryption.
+*/
+encryption_result encrypt_data(
+    const std::vector<unsigned char>& key,
+    const std::vector<unsigned char>& data
+) {
+    encryption_result result;
+
+    // Choose AES-256 (use first 32 bytes of provided key)
+    constexpr size_t AES256_KEY_LEN = 32;
+    if (key.size() < AES256_KEY_LEN) {
+        // Provided key is unexpectedly short; return empty result to fail gracefully
+        return result;
+    }
+
+    // Extract the key prefix to use
+    std::vector<unsigned char> aes_key(key.begin(), key.begin() + AES256_KEY_LEN);
+
+    // Generate a random IV
+    std::vector<unsigned char> iv(AES_BLOCK_SIZE);
+    if (1 != RAND_bytes(iv.data(), static_cast<int>(iv.size()))) {
+        // RAND_bytes failed
+        return result;
+    }
+
+    // Pad the input data to AES block size
+    std::vector<unsigned char> padded = pad_data(data);
+
+    // Prepare output buffer
+    std::vector<unsigned char> out(padded.size());
+
+    // Set AES encryption key
+    AES_KEY encryptKey;
+    if (0 != AES_set_encrypt_key(aes_key.data(), static_cast<int>(AES256_KEY_LEN * 8), &encryptKey)) {
+        // Key setup failed
+        return result;
+    }
+
+    // AES_cbc_encrypt modifies the IV, so make a local copy for the call
+    unsigned char iv_copy[AES_BLOCK_SIZE];
+    std::memcpy(iv_copy, iv.data(), AES_BLOCK_SIZE);
+
+    // Perform CBC encryption
+    AES_cbc_encrypt(
+        padded.data(),
+        out.data(),
+        padded.size(),
+        &encryptKey,
+        iv_copy,
+        AES_ENCRYPT
+    );
+
+    // Fill result
+    result.encrypted_data = std::move(out);
+    result.iv = std::move(iv);
+    result.key = std::move(aes_key);
+
+    return result;
+}
