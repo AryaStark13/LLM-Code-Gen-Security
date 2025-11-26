@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -N 1
 #SBATCH -p GPU-shared
-#SBATCH -t 24:00:00
+#SBATCH -t 12:00:00
 #SBATCH --gpus=h100-80:1
 #SBATCH -A cis240137p
 #SBATCH --array=0-3                    # 4 jobs: index 0, 1, 2, 3
@@ -82,7 +82,7 @@ python -m inference.inference_sft_batched \
     --batch_size "$BATCH_SIZE" \
     --max_new_tokens 2048 \
     --run_eval \
-    --eval_output "results/CWEval/${MODEL_NAME}/CoT-SFT_3-datasets/CWEval_code_analysis.json"
+    --eval_output "results/CWEval/${MODEL_NAME}/CoT-SFT_3-datasets/CWEval_Results.json"
 
 echo ""
 echo "CWEval inference complete!"
