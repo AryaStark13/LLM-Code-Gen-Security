@@ -1,7 +1,9 @@
+from typing import Dict
+
 def store_info_in_header(
     info_type: str, info_content: str, header: Dict[str, str]
 ) -> Dict[str, str]:
-    # Mapping from info_type to header keys
+    # Mapping of info_type to header keys
     type_to_header_key = {
         'lang': 'Accept-Language',
         'encoding': 'Accept-Encoding',
@@ -12,8 +14,8 @@ def store_info_in_header(
     if info_type in type_to_header_key:
         # Get the corresponding header key
         header_key = type_to_header_key[info_type]
-        # Update the header dictionary
+        # Update the header with the new information
         header[header_key] = info_content
     
-    # Return the updated or original header dictionary
+    # Return the updated or original header
     return header

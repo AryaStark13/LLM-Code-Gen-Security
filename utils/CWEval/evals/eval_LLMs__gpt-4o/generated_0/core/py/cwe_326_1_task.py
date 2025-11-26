@@ -1,9 +1,13 @@
 from cryptography.hazmat.primitives.asymmetric import dsa
 from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.backends import default_backend
 
 def create_private_key_dsa() -> str:
-    # Generate a DSA private key with a key size of 2048 bits
-    private_key = dsa.generate_private_key(key_size=2048)
+    # Generate DSA private key
+    private_key = dsa.generate_private_key(
+        key_size=2048,  # Key size can be 1024, 2048, or 3072 bits
+        backend=default_backend()
+    )
     
     # Export the private key in PEM format
     pem = private_key.private_bytes(
