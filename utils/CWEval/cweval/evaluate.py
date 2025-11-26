@@ -484,7 +484,10 @@ class Evaler:
         # out_dir = os.path.join("..", "..", "results", "CWEval", "LLMs", "gpt-4o")
         eval_dir_name = os.path.basename(self.eval_path)  # e.g., eval_deepseek-coder-7b__CoT-SFT_RLVR
         model_name, variant_name = tuple(eval_dir_name.replace("eval_", "", 1).split("__"))  # deepseek-coder-7b__CoT-SFT_RLVR -> (deepseek-coder-7b, CoT-SFT_RLVR)
-        out_dir = os.path.join("..", "..", "results", "CWEval", model_name, variant_name)
+        # out_dir = os.path.join("..", "..", "results", "CWEval", model_name, variant_name) # to be used when running outside docker
+        
+        # Use absolute path to mounted results directory
+        out_dir = os.path.join("/home/ubuntu/results", "CWEval", model_name, variant_name) # to be used when running inside docker
         ensure_dir(out_dir)
 
         # 1) CWEval_unittests_results.json  (per-file structured results)
