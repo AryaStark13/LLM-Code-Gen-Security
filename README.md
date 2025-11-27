@@ -204,7 +204,7 @@ Replace `<model-name>` with the actual name of the model whose results you want 
 python -m scripts.convert_cweval_json_to_eval \
 --parent deepseek-coder-7b/CoT-SFT_RLVR-2-changed
 python -m scripts.convert_cweval_json_to_eval \
---parent CodeLlama-7b-Instruct-hf/CoT-SFT_3-datasets
+--parent deepseek-coder-7b-instruct-v1.5/CoT-SFT_3-datasets
 ```
 
 [Docker env CWEval Evaluation Steps](https://claude.ai/chat/898f9dd8-ec3a-4d72-84e1-f1024361feba) Refer to this to do eval on the docker env directly.

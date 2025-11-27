@@ -1,0 +1,24 @@
+function getUrlForQuery(apiUrl, userId) {
+  // Check if the user ID is empty or invalid
+  if (!userId || !/^[a-zA-Z0-9]+$/.test(userId)) {
+    return null;
+  }
+
+  // Construct the URL by appending the user ID to the API URL
+  const url = `${apiUrl}/${userId}`;
+
+  return url;
+}
+
+
+// BEGIN ENTRYPOINT
+// Main function to read input from command line arguments and print output
+function main() {
+    const apiUrl = process.argv[2];
+    const userId = process.argv[3];
+
+    const result = getUrlForQuery(apiUrl, userId);
+    console.log(result);
+}
+
+main();
