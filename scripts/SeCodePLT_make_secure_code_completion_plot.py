@@ -222,7 +222,7 @@ def create_plot(data, output_path='secure_code_completion_plot.png'):
         bottom += values
     
     # Customize plot appearance
-    ax.set_ylabel('Percentage (%)', fontsize=16)
+    ax.set_ylabel('Percentage of Test Cases', fontsize=16)
     ax.set_title('SeCodePLT Results on the Test Split (85 Examples)', fontsize=22, fontweight='bold')
     # ax.set_title('CWEval Results on the Python Split (85 Examples)', fontsize=14, fontweight='bold')
     ax.set_xticks(x)
