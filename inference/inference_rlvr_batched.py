@@ -61,14 +61,30 @@ def merge_sft_lora_adapter(sft_lora_model):
     merged_model = sft_lora_model.merge_and_unload()
     return merged_model
 
-def load_rlvr_lora_adapter(merged_sft_model, rlvr_lora_adapter_path):
+def load_rlvr_lora_adapter(merged_sft_model, rlvr_lora_adapter_path, subfolder=None):
     print("RLVR LoRA Adapter Path:", rlvr_lora_adapter_path)
+    if subfolder:
+        print("Subfolder:", subfolder)
+    
     is_local = os.path.isdir(rlvr_lora_adapter_path)
-    rlvr_lora_model = PeftModel.from_pretrained(
-        merged_sft_model,
-        rlvr_lora_adapter_path,
-        local_files_only=is_local
-    )
+    
+    # If it's a local path and subfolder is provided, construct the full path
+    if is_local and subfolder:
+        full_path = os.path.join(rlvr_lora_adapter_path, subfolder)
+        print(f"Loading from full path: {full_path}")
+        rlvr_lora_model = PeftModel.from_pretrained(
+            merged_sft_model,
+            full_path,
+            local_files_only=True
+        )
+    else:
+        # For HuggingFace repos or when no subfolder is provided
+        rlvr_lora_model = PeftModel.from_pretrained(
+            merged_sft_model,
+            rlvr_lora_adapter_path,
+            subfolder=subfolder,
+            local_files_only=is_local
+        )
     return rlvr_lora_model
 
 def merge_rlvr_lora_adapter(rlvr_lora_model):
@@ -184,6 +200,8 @@ def main():
                        default="ShethArihant/deepseek-coder-7b-instruct-v1.5_sft_2-epochs")
     parser.add_argument("--rlvr_lora_adapter", type=str, required=True,
                        help="Path to RLVR LoRA adapter")
+    parser.add_argument("--rlvr_lora_adapter_subfolder", type=str, default=None,
+                       help="Subfolder within RLVR LoRA adapter path (e.g., checkpoint-3000)")
     parser.add_argument("--batch_size", type=int, default=1,
                        help="Batch size for inference (default: 1)")
     parser.add_argument("--max_new_tokens", type=int, default=2048,
@@ -213,7 +231,7 @@ def main():
 
     # Load RLVR LoRA adapter on top of merged SFT model
     print("Loading RLVR LoRA adapter...")
-    rlvr_lora_model = load_rlvr_lora_adapter(sft_merged_model, args.rlvr_lora_adapter)
+    rlvr_lora_model = load_rlvr_lora_adapter(sft_merged_model, args.rlvr_lora_adapter, args.rlvr_lora_adapter_subfolder)
 
     # Merge RLVR LoRA adapter
     print("Merging RLVR LoRA adapter...")

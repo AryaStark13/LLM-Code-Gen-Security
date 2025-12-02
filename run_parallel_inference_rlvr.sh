@@ -29,7 +29,7 @@ cd $PROJECT_DIR
 # mkdir -p results/CWEval
 
 # Define model configs - using local paths
-MODELS_DIR="./models"
+MODELS_DIR="/ocean/projects/cis240137p/asheth1/hf_models"
 
 BASE_MODELS=(
     "${MODELS_DIR}/google__codegemma-7b-it"
@@ -52,6 +52,14 @@ RLVR_ADAPTERS=(
     "${MODELS_DIR}/lindafei001__qwen-7B-multilang"
 )
 
+# Specify the checkpoint subfolder for each RLVR adapter
+RLVR_ADAPTER_SUBFOLDERS=(
+    "checkpoint-3000"
+    "checkpoint-2700"
+    "checkpoint-3800"
+    "checkpoint-3100"
+)
+
 MODEL_NAMES=(
     "codegemma-7b-it"
     "CodeLlama-7b-Instruct-hf"
@@ -63,6 +71,7 @@ MODEL_NAMES=(
 BASE_MODEL=${BASE_MODELS[$SLURM_ARRAY_TASK_ID]}
 SFT_ADAPTER=${SFT_ADAPTERS[$SLURM_ARRAY_TASK_ID]}
 RLVR_ADAPTER=${RLVR_ADAPTERS[$SLURM_ARRAY_TASK_ID]}
+RLVR_ADAPTER_SUBFOLDER=${RLVR_ADAPTER_SUBFOLDERS[$SLURM_ARRAY_TASK_ID]}
 MODEL_NAME=${MODEL_NAMES[$SLURM_ARRAY_TASK_ID]}
 
 echo "========================================"
@@ -70,6 +79,7 @@ echo "Job Array Task ID: $SLURM_ARRAY_TASK_ID"
 echo "Base Model: $BASE_MODEL"
 echo "SFT Adapter: $SFT_ADAPTER"
 echo "RLVR Adapter: $RLVR_ADAPTER"
+echo "RLVR Adapter Subfolder: $RLVR_ADAPTER_SUBFOLDER"
 echo "Model Name: $MODEL_NAME"
 echo "========================================"
 
@@ -93,6 +103,7 @@ python -m inference.inference_rlvr_batched \
     --base_model $BASE_MODEL \
     --sft_lora_adapter $SFT_ADAPTER \
     --rlvr_lora_adapter $RLVR_ADAPTER \
+    --rlvr_lora_adapter_subfolder $RLVR_ADAPTER_SUBFOLDER \
     --batch_size $BATCH_SIZE \
     --max_new_tokens 2048 \
     --run_eval \
@@ -116,6 +127,7 @@ python -m inference.inference_rlvr_batched \
     --base_model $BASE_MODEL \
     --sft_lora_adapter $SFT_ADAPTER \
     --rlvr_lora_adapter $RLVR_ADAPTER \
+    --rlvr_lora_adapter_subfolder $RLVR_ADAPTER_SUBFOLDER \
     --batch_size $BATCH_SIZE \
     --max_new_tokens 2048 \
     --run_eval \

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Put all model files under this directory
-TARGET_DIR="./models"
+TARGET_DIR="/ocean/projects/cis240137p/asheth1/hf_models"
 
 mkdir -p "$TARGET_DIR"
 
