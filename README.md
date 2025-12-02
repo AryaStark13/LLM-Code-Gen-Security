@@ -209,6 +209,28 @@ python -m scripts.convert_cweval_json_to_eval \
 
 [Docker env CWEval Evaluation Steps](https://claude.ai/chat/898f9dd8-ec3a-4d72-84e1-f1024361feba) Refer to this to do eval on the docker env directly.
 
+Steps to run CWEval evaluation on Docker:
+```bash
+docker run --name cweval --rm -it \
+  -v $(pwd)/utils/CWEval:/home/ubuntu/CWEval \
+  -v $(pwd)/results:/home/ubuntu/results \
+  --net host \
+  co1lin/cweval zsh
+```
+
+```bash
+# Inside the Docker container
+cd /home/ubuntu/CWEval
+source .env
+
+export EVAL_PATH=evals/eval_deepseek-coder-7b-instruct-v1.5__multilingual-RLVR
+
+python cweval/evaluate.py pipeline \
+  --eval_path $EVAL_PATH \
+  --num_proc 4 \
+  --docker False
+```
+
 2. 
 ```bash
 cd utils/CWEval
